@@ -116,10 +116,10 @@
 ![Controller 和 Method](images/1.jpeg) <br>
 
 ##### Ro
-![Ro](images/2.jpeg) <br>
+![Ro](images/2.png) <br>
 
 ##### Vo
-![Vo](images/3.jpeg) <br>
+![Vo](images/3.png) <br>
 
 ##### Example
 ![Example](images/4.jpeg) <br>
