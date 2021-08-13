@@ -99,7 +99,7 @@
 |       ----          |                    ----                       |                 -----            |
 | @order *100*         | Controller                                       |  文档排序          |
 | @author *Qiao*      | Controller <br> Method                            |  作者             |
-| @serverUrl *http://...*      | Controller <br> Method                            |  指定serverUrl，会覆盖config里的serverUrl |
+| @serverUrl *http://...*      | Controller <br> Method                            |  指定serverUrl，会覆盖config里的serverUrl，用于从zuul路由过来的情况，可填写来源服务的url |
 | @ignore <br> @ignore *editEstate* | Controller <br> Method <br> Filed | 忽略 ***Controller*** 、***Method*** 、***Filed*** ，不生成其文档。 <br> 作用在 ***Filed*** 时，若有分组，则只有与 ***Method*** 分组相同的字段才忽略。 |
 | @group *editEstate*       | Method                                            | 方法分组，配合 ***@ignore*** 使用，可忽略某个分组下的字段 |
 | @ignoreParams *groupId,estateId*         | Method                                       |  忽略方法的一些参数，不生成文档          |
@@ -111,7 +111,18 @@
 | @mock *10086*         |   Filed                                       |  mock请求或响应示例，或者字段的 ***注释\|10086*** 也能实现mock值          |
 | @required         |   Filed                                       |  强制为必填参数，建议使用 ***NotNull*** 系列注解来控制是否必填          |
 
- 
+### 举个栗子🌰
+##### Controller、Method
+![Controller 和 Method](images/1.jpeg) <br>
+
+##### Ro
+![Ro](images/2.jpeg) <br>
+
+##### Vo
+![Vo](images/3.jpeg) <br>
+
+##### Example
+![Example](images/4.jpeg) <br>
  
  
  
