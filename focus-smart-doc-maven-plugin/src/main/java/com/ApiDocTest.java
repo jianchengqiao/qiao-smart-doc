@@ -23,14 +23,14 @@ public class ApiDocTest {
     public static void testBuilderControllersApi() {
         ApiConfig config = new ApiConfig();
         config.setCoverOld(true);
-        config.setCreateDebugPage(true);
+        config.setCreateDebugPage(false);
         config.setAllInOneDocFileName("index.html");
         config.setServerUrl("http://localhost:8080");
         config.setAllInOne(true);
         config.setOutPath("/Users/Qiao/Desktop/doc");
         config.setMd5EncryptedHtmlName(true);
-        config.setRequestExample(true);
-        config.setResponseExample(true);
+        config.setRequestExample(false);
+        config.setResponseExample(false);
         config.setRecursionLimit(3);
         config.setRandomMock(true);
         //不指定SourcePaths默认加载代码为项目src/main/java下的

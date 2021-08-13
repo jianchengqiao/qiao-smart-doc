@@ -45,18 +45,19 @@
 ### 配置文件
 ```
 {
-  "projectName": "xxx接口文档 v1.0", // 文档title
-  "serverUrl": "http://xxx.test.cn", // 文档url，SendRequest也是这个url，注意跨域问题可能导致调不通，不填默认localhost
-  "version": "1.0", // 展示版本号
-  "outPath": "/Users/Qiao/Documents/IdeaProjects/pages/doc/sc-data/api", // 文档输出地址，可输出到一个git目录下
-  "packageFilters": "cn.focus.sc.data.controller.doc", // 包过滤，不填默认全部包
-  "requestExample": true, // 是否展示请求示例，默认是
-  "responseExample": true, // 是否展示响应示例，默认是
-  "randomMock": true, // 是否随机mock示例数值，默认是，否则全输出为null
+  "projectName": "xxx接口文档 v1.0", // 文档title，默认空
+  "serverUrl": "http://xxx.test.cn", // 文档url，调试SendRequest也是这个url，注意跨域问题可能导致调不通，默认空
+  "version": "1.0", // 展示版本号，默认空
+  "outPath": "/Users/Qiao/Documents/IdeaProjects/pages/doc/sc-data/api", // 文档输出地址，可输出到一个git目录下，必须配置
+  "packageFilters": "cn.focus.sc.data.controller.doc", // 包过滤，默认全部包
+  "requestExample": true, // 是否展示请求示例，默认true
+  "responseExample": true, // 是否展示响应示例，默认true
+  "createDebugPage": true, // 是否开启调试(SendRequest)，默认true，否则不能调试，不能编辑输入参数
+  "randomMock": true, // 是否随机mock示例数值，默认true，否则全输出为null
   "sourceCodePaths":{
-    "path":"/Users/Qiao/Documents/IdeaProjects/sc-data/code/src/main/java" // 源码地址，不填默认是当前项目 src/main/java
+    "path":"/Users/Qiao/Documents/IdeaProjects/sc-data/code/src/main/java" // 源码地址，默认当前项目的 src/main/java
   },
-  "revisionLogs": [ // 版本更新说明
+  "revisionLogs": [ // 版本更新说明，默认空
        {
          "version": "1.0",
          "revisionTime": "2021-07-15 16:00",
@@ -65,12 +66,12 @@
          "remarks": "1.0 初版"
        }
   ],
-  "descriptions": [ // 调用说明
+  "descriptions": [ // 调用说明，默认空
     "此处是调用说明",
     "1.所有请求必须携带token所有请求必须携带token",
     "2.所有请求必须携带token所有请求必须携带token"
   ],
-  "dataDictionaries": [ // 枚举列表
+  "dataDictionaries": [ // 枚举列表，默认空
     {
       "title": "获取来源",
       "enumClassName": "cn.focus.sc.data.enums.SourceEnum",
@@ -78,7 +79,7 @@
       "descField": "name"
     }
   ],
-  "errorCodeDictionaries": [ // 错误码列表
+  "errorCodeDictionaries": [ // 错误码列表，默认空
     {
       "title": "错误码",
       "enumClassName": "cn.focus.sc.data.enums.CodeEnum",

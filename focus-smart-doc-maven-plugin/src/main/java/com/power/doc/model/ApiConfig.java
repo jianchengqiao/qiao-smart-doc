@@ -50,7 +50,7 @@ public class ApiConfig {
     /**
      * Merge all api doc into one document
      */
-    private boolean allInOne;
+    private boolean allInOne = true;
 
     /**
      * output path
@@ -72,7 +72,7 @@ public class ApiConfig {
      * @since 1.7.5
      * cover old all in one markdown
      */
-    private boolean coverOld;
+    private boolean coverOld = true;
 
     /**
      * list of custom response filed
@@ -155,7 +155,7 @@ public class ApiConfig {
      * @since 1.7.5
      * project name
      */
-    private String projectName;
+    private String projectName = "xxxx接口文档";
     /**
      * @since 2.0.7
      * project  cn name
@@ -241,12 +241,12 @@ public class ApiConfig {
      *
      * @since 1.9.0
      */
-    private String allInOneDocFileName;
+    private String allInOneDocFileName = "index.html";
 
     /**
      * convert param data to tree
      */
-    private boolean paramsDataToTree;
+    private boolean paramsDataToTree = true;
 
     /**
      * request ignore param
@@ -261,7 +261,7 @@ public class ApiConfig {
      *
      * @since 1.9.6
      */
-    private boolean displayActualType;
+    private boolean displayActualType = true;
 
     /**
      * Support Spring MVC ResponseBodyAdvice
@@ -272,12 +272,12 @@ public class ApiConfig {
 
     private BodyAdvice requestBodyAdvice;
 
-    private String style;
+    private String style = "xt256";
 
     /**
      * create debug page
      */
-    private boolean createDebugPage;
+    private boolean createDebugPage = true;
 
     /**
      * Spring MVC url suffix

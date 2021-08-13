@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="smart-doc">
     <%if(isNotEmpty(projectName)){%><title>${projectName}</title><%}else{%><title>API Reference</title><%}%>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
     <link rel="stylesheet" href="AllInOne.css?v=${version}"/>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/${style}.min.css">
     <style>.literalblock pre, .listingblock pre:not(.highlight), .listingblock pre[class="highlight"], .listingblock pre[class^="highlight "], .listingblock pre.CodeRay, .listingblock pre.prettyprint {
@@ -20,7 +18,7 @@
     <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 </head>
 <body class="book toc2 toc-left">
-<div id="header"><%if(isNotEmpty(projectName)){%><h1>${projectName}</h1><%}%>
+<div id="header"><%if(isNotEmpty(projectName)){%><h1><strong>${projectName}</strong></h1><%}%>
     <div id="toc" class="toc2">
         <div id="book-search-input"><input id="search" type="text" placeholder="Type to search"></div>
         <div id="toctitle"><span>API Reference</span></div>
@@ -58,16 +56,17 @@
         </ul>
     </div>
 </div>
-<div id="content"><%if(isNotEmpty(revisionLogList)){%>
+<div id="content">
+    <%if(isNotEmpty(revisionLogList)){%>
     <div id="preamble">
         <div class="sectionbody">
             <table class="tableblock frame-all grid-all spread">
                 <colgroup>
+                    <col style="width: 10%;">
                     <col style="width: 20%;">
+                    <col style="width: 10%;">
                     <col style="width: 20%;">
-                    <col style="width: 20%;">
-                    <col style="width: 20%;">
-                    <col style="width: 20%;">
+                    <col style="width: 40%;">
                 </colgroup>
                 <thead>
                 <tr>
@@ -92,41 +91,63 @@
             </table>
         </div>
     </div>
-    <%}%><%for(api in apiDocList){%>
-    <div class="sect1"><h3 id="_${api.desc}"><a class="anchor" href="#_${api.desc}"></a><a class="link"
-                                                                                           href="#_${api.desc}">${api.order}.&nbsp;${api.desc}</a>
-    </h3>
+    <%}%>
+
+    <%if(isNotEmpty(descriptions)){%>
+    <div class="sect1">
+        <h3 id="_调用说明"><a class="anchor" href="#_调用说明"></a>
+            <a class="link" href="#_调用说明"><strong>调用说明</strong></a>
+        </h3>
+        <%for(des in descriptions){%>
+        <div class="paragraph"><p>${des}</p></div>
+        <%}%>
+    </div>
+    <%}%>
+
+    <%for(api in apiDocList){%>
+    <div class="sect1">
+        <h3 id="_${api.desc}"><a class="anchor" href="#_${api.desc}"></a><a class="link"
+                                                                            href="#_${api.desc}"><strong>${api.order}.&nbsp;${api.desc}</strong></a>
+        </h3>
         <div class="sectionbody"><%for(doc in api.list){%>
-            <div class="sect2"><h4 id="_${api.order}_${doc.order}_${doc.desc}"><a class="anchor"
-                                                                                  href="#_${api.order}_${doc.order}_${doc.desc}"></a><%if(doc.deprecated){%><a
-                    class="link" href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
-                    class="line-through">${doc.desc}</span></a><%}else{%><a class="link"
-                                                                            href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a><%}%>
+            <div class="sect2" id="${doc.methodId}">
+                <h4 id="_${api.order}_${doc.order}_${doc.desc}"><a class="anchor"
+                                                                                                       href="#_${api.order}_${doc.order}_${doc.desc}"></a>
+                <%if(doc.deprecated){%><a
+                    class="link" href="#_${api.order}_${doc.order}_${doc.desc}"><strong>${api.order}.${doc.order}.&nbsp;<span
+                    class="line-through">${doc.desc}</span></strong></a>
+                <%}
+                else{%><a class="link" href="#_${api.order}_${doc.order}_${doc.desc}"><strong>${api.order}.${doc.order}.&nbsp;${doc.desc}</strong></a>
+                <%}%>
             </h4>
+                <%if(isNotEmpty(doc.detail)&&isNotEqual(doc.detail,doc.desc)){%>
                 <div class="paragraph"><p><strong>Description:</strong>&nbsp;${doc.detail}</p></div>
-                <div class="paragraph"><p><strong>URL:</strong>&nbsp;${doc.type}&nbsp;${doc.url}</p></div>
+                <%}%>
+                <div class="paragraph" id="${doc.methodId}-url" data-url="${doc.url}" data-download="${doc.download}"
+                     data-page="${doc.page}"><p><strong>URL:</strong>&nbsp;${doc.type}&nbsp;<a href="${doc.url}">${doc.url}</a></p></div>
                 <%if(isNotEmpty(doc.author)){%>
                 <div class="paragraph"><p><strong>Author:</strong>&nbsp;${doc.author}</p></div>
                 <%}%>
-                <%if(isNotEmpty(doc.contentType)){%>
-                <div class="paragraph"><p><strong>Content-Type:</strong>&nbsp;${doc.contentType}</p></div>
+                <%if(isNotEqual(doc.type, "GET")&&isNotEmpty(doc.contentType)){%>
+                <div class="paragraph" id="${doc.methodId}-content-type" data-content-type="${doc.contentType}"><p>
+                    <strong>Content-Type:</strong>&nbsp;${doc.contentType}</p></div>
                 <%}%>
                 <%if(isNotEmpty(doc.requestHeaders)){%>
                 <div class="paragraph"><p><strong>Request-headers:</strong></p></div>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 50%;">
+                        <col style="width: 10%;">
                     </colgroup>
                     <thead>
                     <tr>
                         <th class="tableblock halign-left valign-top">Header</th>
                         <th class="tableblock halign-left valign-top">Type</th>
-                        <th class="tableblock halign-left valign-top">Description</th>
                         <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
                         <th class="tableblock halign-left valign-top">Since</th>
                     </tr>
                     </thead>
@@ -134,8 +155,8 @@
                     <tr>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${header.name}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${header.type}</p></td>
-                        <td class="tableblock halign-left valign-top"><p class="tableblock">${header.desc}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${header.required}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${header.desc}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${header.since}</p></td>
                     </tr>
                     <%}%>
@@ -146,17 +167,17 @@
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 50%;">
+                        <col style="width: 10%;">
                     </colgroup>
                     <thead>
                     <tr>
                         <th class="tableblock halign-left valign-top">Parameter</th>
                         <th class="tableblock halign-left valign-top">Type</th>
-                        <th class="tableblock halign-left valign-top">Description</th>
                         <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
                         <th class="tableblock halign-left valign-top">Since</th>
                     </tr>
                     </thead>
@@ -164,8 +185,8 @@
                     <tr>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.field}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.type}</p></td>
-                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.desc}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.required}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.desc}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.version}</p></td>
                     </tr>
                     <%}%>
@@ -176,17 +197,17 @@
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 50%;">
+                        <col style="width: 10%;">
                     </colgroup>
                     <thead>
                     <tr>
                         <th class="tableblock halign-left valign-top">Parameter</th>
                         <th class="tableblock halign-left valign-top">Type</th>
-                        <th class="tableblock halign-left valign-top">Description</th>
                         <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
                         <th class="tableblock halign-left valign-top">Since</th>
                     </tr>
                     </thead>
@@ -194,8 +215,8 @@
                     <tr>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.field}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.type}</p></td>
-                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.desc}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.required}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.desc}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.version}</p></td>
                     </tr>
                     <%}%>
@@ -206,17 +227,17 @@
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 50%;">
+                        <col style="width: 10%;">
                     </colgroup>
                     <thead>
                     <tr>
                         <th class="tableblock halign-left valign-top">Parameter</th>
                         <th class="tableblock halign-left valign-top">Type</th>
-                        <th class="tableblock halign-left valign-top">Description</th>
                         <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
                         <th class="tableblock halign-left valign-top">Since</th>
                     </tr>
                     </thead>
@@ -224,28 +245,30 @@
                     <tr>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.field}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.type}</p></td>
-                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.desc}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.required}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.desc}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.version}</p></td>
                     </tr>
                     <%}%>
                     </tbody>
                 </table>
-                <%}%><%if(isNotEmpty(doc.requestUsage)&&isRequestExample){%>
-                <div class="paragraph"><p><strong>Request-example:</strong></p></div>
+                <%}%>
+                <%if(isNotEmpty(doc.requestExample.jsonBody)&&isRequestExample){%>
+                <div class="paragraph"><p><strong>Request-body:</strong></p></div>
                 <div class="listingblock">
                     <div class="content">
-                        <pre><code class="bash">${doc.requestUsage}</code></pre>
+                        <pre><code contenteditable="plaintext-only" id="${doc.methodId}-body">${doc.requestExample.jsonBody}</code></pre>
                     </div>
                 </div>
-                <%}%><%if(isNotEmpty(doc.responseParams)){%>
+                <%}%>
+                <%if(isNotEmpty(doc.responseParams)){%>
                 <div class="paragraph"><p><strong>Response-fields:</strong></p></div>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
-                        <col style="width: 25%;">
-                        <col style="width: 25%;">
-                        <col style="width: 25%;">
-                        <col style="width: 25%;">
+                        <col style="width: 20%;">
+                        <col style="width: 10%;">
+                        <col style="width: 60%;">
+                        <col style="width: 10%;">
                     </colgroup>
                     <thead>
                     <tr>
@@ -284,8 +307,8 @@
         <div class="sectionbody">
             <table class="tableblock frame-all grid-all spread">
                 <colgroup>
-                    <col style="width: 50%;">
-                    <col style="width: 50%;">
+                    <col style="width: 20%;">
+                    <col style="width: 80%;">
                 </colgroup>
                 <thead>
                 <tr>
@@ -313,9 +336,9 @@
             </h4>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
-                        <col style="width: 33%;">
-                        <col style="width: 33%;">
-                        <col style="width: 33%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 60%;">
                     </colgroup>
                     <thead>
                     <tr>
