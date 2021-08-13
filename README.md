@@ -1,8 +1,8 @@
 ### Smart-Doc 修改简化版
 **原项目 https://github.com/smart-doc-group/smart-doc**  
-本项目在原项目基础上修改，增加一些功能，个人学习使用，正版使用请支持原项目
+本项目在原项目基础上修改，增删一些功能，个人学习使用，正版使用请支持原版
 
-#### 引入依赖
+### 引入依赖
 ```
 <plugins>
     <plugin>
@@ -26,7 +26,7 @@
  </plugins>
 ```
 
-#### 最简配置
+### 最简配置
 ```
 {
   "projectName": "智慧案场-客户管理接口文档 v1.0",
@@ -35,8 +35,9 @@
 }
 ```
 
-#### 配置文件
-```{
+### 配置文件
+```
+{
   "projectName": "智慧案场-客户管理接口文档 v1.0", // 文档title
   "serverUrl": "http://sc-data.focus-test.cn", // 文档url，sendRequest也是这个url，注意跨域问题可能导致调不通，不填默认localhost
   "version": "1.0", // 展示版本号
@@ -83,11 +84,11 @@
 
 ## @tag使用
 |  tag   | 位置  |   说明 |
-|  ----  | ----  ||
-| *@order 100*  | Controller |  文档排序 |
-| *@author Qiao*  | Controller Method | 作者 |
-| *@group edit*  | Method | 分组，配合 @ignore 使用，可忽略某个分组下的字段 |
-| *@ignore* *@ignore edit*| Controller Method Filed | 忽略Controller、方法、字段，不生成其文档。作用在字段时，若有分组，则只有与分组相同的方法才忽略 |
+|  ----  | ----  |-----|
+| @order 100  | Controller |  文档排序 |
+| @author Qiao  | Controller <br> Method | 作者 |
+| @group edit  | Method | 分组，配合 @ignore 使用，可忽略某个分组下的字段 |
+| @ignore <br> @ignore edit | Controller <br> Method <br> Filed | 忽略Controller、方法、字段，不生成其文档。 <br> 作用在字段时，若有分组，则只有与分组相同的方法才忽略。 |
  
  
  
