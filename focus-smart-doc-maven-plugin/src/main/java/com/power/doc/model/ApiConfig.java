@@ -55,7 +55,7 @@ public class ApiConfig {
     /**
      * output path
      */
-    private String outPath;
+    private String outPath = "src/main/resources/doc";
 
 
     /**

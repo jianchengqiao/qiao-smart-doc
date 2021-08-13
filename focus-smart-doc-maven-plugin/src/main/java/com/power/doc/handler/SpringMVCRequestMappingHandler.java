@@ -32,8 +32,7 @@ import com.power.doc.constants.SpringMvcAnnotations;
 import com.power.doc.model.request.RequestMapping;
 import com.power.doc.utils.DocUrlUtil;
 import com.power.doc.utils.DocUtil;
-import com.thoughtworks.qdox.model.JavaAnnotation;
-import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +41,7 @@ import java.util.Objects;
 
 import static com.power.doc.constants.DocTags.DEPRECATED;
 import static com.power.doc.constants.DocTags.IGNORE;
+import static com.power.doc.constants.DocTags.SERVER_URL;
 
 /**
  * @author yu 2019/12/22.
@@ -57,13 +57,12 @@ public class SpringMVCRequestMappingHandler {
      * @param constantsMap      project constant container
      * @return RequestMapping
      */
-    public RequestMapping handle(ProjectDocConfigBuilder projectBuilder, String controllerBaseUrl, JavaMethod method, Map<String, String> constantsMap) {
+    public RequestMapping handle(ProjectDocConfigBuilder projectBuilder, String serverUrl,String controllerBaseUrl, JavaMethod method, Map<String, String> constantsMap) {
         List<JavaAnnotation> annotations = method.getAnnotations();
         String url;
         String methodType = null;
         String shortUrl = null;
         String mediaType = null;
-        String serverUrl = projectBuilder.getServerUrl();
         boolean deprecated = false;
         for (JavaAnnotation annotation : annotations) {
             String annotationName = annotation.getType().getName();

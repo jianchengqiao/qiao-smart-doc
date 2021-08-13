@@ -25,9 +25,7 @@ public class ApiDocTest {
         config.setCoverOld(true);
         config.setCreateDebugPage(false);
         config.setAllInOneDocFileName("index.html");
-        config.setServerUrl("http://localhost:8080");
         config.setAllInOne(true);
-        config.setOutPath("/Users/Qiao/Desktop/doc");
         config.setMd5EncryptedHtmlName(true);
         config.setRequestExample(false);
         config.setResponseExample(false);

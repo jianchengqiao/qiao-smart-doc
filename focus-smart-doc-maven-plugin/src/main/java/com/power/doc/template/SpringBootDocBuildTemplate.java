@@ -124,6 +124,11 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             }
         }
         List<JavaMethod> methods = cls.getMethods();
+        String serverUrl = projectBuilder.getServerUrl();
+        DocletTag serverUrlTag = cls.getTagByName(SERVER_URL);
+        if (serverUrlTag != null && serverUrlTag.getValue() != null && !serverUrlTag.getValue().trim().isEmpty()) {
+            serverUrl = serverUrlTag.getValue();
+        }
         List<DocJavaMethod> docJavaMethods = new ArrayList<>(methods.size());
         for (JavaMethod method : methods) {
             if (method.isPrivate()) {
@@ -146,9 +151,13 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             if (method.isPrivate() || Objects.nonNull(method.getTagByName(IGNORE))) {
                 continue;
             }
+            serverUrlTag = method.getTagByName(SERVER_URL);
+            if (serverUrlTag != null && serverUrlTag.getValue() != null && !serverUrlTag.getValue().trim().isEmpty()) {
+                serverUrl = serverUrlTag.getValue();
+            }
             //handle request mapping
             RequestMapping requestMapping = new SpringMVCRequestMappingHandler()
-                    .handle(projectBuilder, baseUrl, method, constantsMap);
+                    .handle(projectBuilder, serverUrl,baseUrl, method, constantsMap);
             if (Objects.isNull(requestMapping)) {
                 continue;
             }
@@ -162,7 +171,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             }
             DocletTag pageTag = method.getTagByName(DocTags.PAGE);
             if (Objects.nonNull(pageTag)) {
-                String pageUrl = projectBuilder.getServerUrl() + "/" + pageTag.getValue();
+                String pageUrl = serverUrl + "/" + pageTag.getValue();
                 apiMethodDoc.setPage(UrlUtil.simplifyUrl(pageUrl));
             }
             DocletTag docletTag = method.getTagByName(DocTags.GROUP);
@@ -196,7 +205,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
 
             apiMethodDoc.setType(requestMapping.getMethodType());
             apiMethodDoc.setUrl(requestMapping.getUrl());
-            apiMethodDoc.setServerUrl(projectBuilder.getServerUrl());
+            apiMethodDoc.setServerUrl(serverUrl);
             apiMethodDoc.setPath(requestMapping.getShortUrl());
             apiMethodDoc.setDeprecated(requestMapping.isDeprecated());
             ApiMethodReqParam apiMethodReqParam = requestParams(docJavaMethod, projectBuilder);

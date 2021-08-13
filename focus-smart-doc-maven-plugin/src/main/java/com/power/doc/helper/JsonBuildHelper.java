@@ -209,7 +209,7 @@ public class JsonBuildHelper {
                 Map<String, String> tagsMap = DocUtil.getFieldTagsValue(field, docField);
                 if (tagsMap.containsKey(DocTags.IGNORE)) {
                     String groupValue = tagsMap.get(DocTags.IGNORE);
-                    if (StringUtil.isEmpty(groupValue) || groupValue.contains(methodGroupValue)) {
+                    if (StringUtil.isEmpty(groupValue) ||StringUtil.isEmpty(methodGroupValue) || groupValue.contains(methodGroupValue)) {
                         continue out;
                     }
                 }

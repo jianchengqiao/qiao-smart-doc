@@ -1,6 +1,7 @@
 {
   "projectName": "xxxx接口文档",
   "displayActualType": true,
+  "serverUrl": "code/src/main/resources/doc",
   "version": "1.0",
   "coverOld": true,
   "allInOne": true,
@@ -12,6 +13,8 @@
   "createDebugPage": true,
   "skipTransientField": true,
   "requestExample": true,
+  "responseExample": true,
+  "randomMock": true,
   "inlineEnum": true,
   "showJavaType": true,
   "dataDictionaries": [

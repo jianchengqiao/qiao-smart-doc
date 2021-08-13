@@ -130,7 +130,7 @@ public class ParamsBuildHelper {
                 String since = DocGlobalConstants.DEFAULT_VERSION;//since tag value
                 if (tagsMap.containsKey(DocTags.IGNORE)) {
                     String groupValue = tagsMap.get(DocTags.IGNORE);
-                    if (StringUtil.isEmpty(groupValue) || groupValue.contains(methodGroupValue)) {
+                    if (StringUtil.isEmpty(groupValue) ||StringUtil.isEmpty(methodGroupValue) || groupValue.contains(methodGroupValue)) {
                         continue out;
                     }
                 } else if (tagsMap.containsKey(DocTags.SINCE)) {

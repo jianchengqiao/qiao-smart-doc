@@ -48,8 +48,8 @@
   "projectName": "xxx接口文档 v1.0", // 文档title，默认空
   "serverUrl": "http://xxx.test.cn", // 文档url，调试SendRequest也是这个url，注意跨域问题可能导致调不通，默认空
   "version": "1.0", // 展示版本号，默认空
-  "outPath": "/Users/Qiao/Documents/IdeaProjects/pages/doc/sc-data/api", // 文档输出地址，可输出到一个git目录下，必须配置
-  "packageFilters": "cn.focus.sc.data.controller.doc", // 包过滤，默认全部包
+  "outPath": "code/src/main/resources/doc", // 文档输出地址，默认输出到当前项目resources/doc
+  "packageFilters": "cn.focus.sc.data.controller", // 包过滤，默认全部包
   "requestExample": true, // 是否展示请求示例，默认true
   "responseExample": true, // 是否展示响应示例，默认true
   "createDebugPage": true, // 是否开启调试(SendRequest)，默认true，否则不能调试，不能编辑输入参数
@@ -98,6 +98,7 @@
 |       ----          |                    ----                       |                 -----            |
 | @order *100*         | Controller                                       |  文档排序          |
 | @author *Qiao*      | Controller <br> Method                            |  作者             |
+| @serverUrl *http://...*      | Controller <br> Method                            |  指定serverUrl，会覆盖config里的serverUrl |
 | @ignore <br> @ignore *editEstate* | Controller <br> Method <br> Filed | 忽略 ***Controller*** 、***Method*** 、***Filed*** ，不生成其文档。 <br> 作用在 ***Filed*** 时，若有分组，则只有与 ***Method*** 分组相同的字段才忽略。 |
 | @group *editEstate*       | Method                                            | 方法分组，配合 ***@ignore*** 使用，可忽略某个分组下的字段 |
 | @ignoreParams *groupId,estateId*         | Method                                       |  忽略方法的一些参数，不生成文档          |
