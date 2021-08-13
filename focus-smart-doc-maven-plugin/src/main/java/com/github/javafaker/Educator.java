@@ -7,7 +7,6 @@ public class Educator {
         this.faker = faker;
     }
 
-    // TODO - move these all out to en.yml by default. 
     public String university() {
         return faker.fakeValuesService().resolve("educator.name", this, faker) 
                 + " " 
