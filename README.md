@@ -78,10 +78,16 @@
       "descField": "msg"
     }
   ]
-}```
+}
+```
 
 ## @tag使用
-
+|  tag   | 位置  |   说明 |
+|  ----  | ----  ||
+| *@order 100*  | Controller |  文档排序 |
+| *@author Qiao*  | Controller Method | 作者 |
+| *@group edit*  | Method | 分组，配合 @ignore 使用，可忽略某个分组下的字段 |
+| *@ignore* *@ignore edit*| Controller Method Filed | 忽略Controller、方法、字段，不生成其文档。作用在字段时，若有分组，则只有与分组相同的方法才忽略 |
  
  
  
