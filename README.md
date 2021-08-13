@@ -1,6 +1,6 @@
 #### Smart-Doc 修改简化版
 
-## 引入依赖
+#### 引入依赖
 ```
 <plugins>
     <plugin>
@@ -24,14 +24,16 @@
  </plugins>
 ```
 
-## 最简配置
-```{
+#### 最简配置
+```
+{
   "projectName": "智慧案场-客户管理接口文档 v1.0",
   "serverUrl": "https://sc-data.focus-test.cn",
   "outPath": "/Users/Qiao/Documents/IdeaProjects/pages/doc/sc-data/api"
-}```
+}
+```
 
-## 配置文件
+#### 配置文件
 ```{
   "projectName": "智慧案场-客户管理接口文档 v1.0", // 文档title
   "serverUrl": "http://sc-data.focus-test.cn", // 文档url，sendRequest也是这个url，注意跨域问题可能导致调不通，不填默认localhost
