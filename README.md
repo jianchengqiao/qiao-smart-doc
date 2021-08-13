@@ -37,8 +37,7 @@
 ```
 {
   "projectName": "xxx接口文档 v1.0",
-  "serverUrl": "https://xxx.test.cn",
-  "outPath": "/Users/Qiao/Documents/IdeaProjects/pages/doc/sc-data/api"
+  "serverUrl": "https://xxx.test.cn"
 }
 ```
 
