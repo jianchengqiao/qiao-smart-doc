@@ -56,7 +56,7 @@ public class JavaClassUtil {
         } else if ("Object".equals(cls1.getSimpleName()) || "Timestamp".equals(cls1.getSimpleName()) ||
                 "Date".equals(cls1.getSimpleName()) || "Locale".equals(cls1.getSimpleName())
                 || "ClassLoader".equals(cls1.getSimpleName()) || JavaClassValidateUtil.isMap(cls1.getFullyQualifiedName())
-                || cls1.isEnum() || "Serializable".equals(cls1.getSimpleName())
+                || /*cls1.isEnum() ||*/ "Serializable".equals(cls1.getSimpleName())
                 || "ZonedDateTime".equals(cls1.getSimpleName())) {
             return fieldList;
         } else {
@@ -126,6 +126,9 @@ public class JavaClassUtil {
                 }
             }
             for (JavaField javaField : cls1.getFields()) {
+                if (javaField.isStatic()||javaField.isEnumConstant()||javaField.isNative()){
+                    continue;
+                }
                 String fieldName = javaField.getName();
                 DocJavaField docJavaField = DocJavaField.builder();
                 boolean typeChecked = false;

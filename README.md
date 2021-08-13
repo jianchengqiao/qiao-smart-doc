@@ -5,6 +5,8 @@
 ### 说明
 * 根据 Controller、Method、传入参数、返回值的 ***JavaDoc注释***
   自动生成文档，一定要写好注释
+* 默认会生成文档的请求、响应示例，建议在每个参数注释后加上 **"|"**
+  mock示例数据，可跳过随机mock
 * 是否必填 ***Required*** 会根据 ***@RequestParam*** ***@NotNull***
   ***@NotEmpty*** 等注解来生成，且会根据 ***@Validated***
   分组来判断，要合理使用 ***Valid*** 系列注解

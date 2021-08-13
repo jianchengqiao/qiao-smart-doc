@@ -251,7 +251,7 @@ public class ParamsBuildHelper {
                     if (StringUtil.isNotEmpty(comment)) {
                         commonHandleParam(paramList, param, isRequired, comment, since, strRequired);
                     } else {
-                        commonHandleParam(paramList, param, isRequired, NO_COMMENTS_FOUND, since, strRequired);
+                        commonHandleParam(paramList, param, isRequired, fieldName, since, strRequired);
                     }
                 } else {
                     ApiParam param = ApiParam.of().setField(pre + fieldName).setPid(pid).setMaxLength(maxLength);
@@ -320,7 +320,7 @@ public class ParamsBuildHelper {
                     if (StringUtil.isNotEmpty(comment)) {
                         commonHandleParam(paramList, param, isRequired, comment + appendComment, since, strRequired);
                     } else {
-                        commonHandleParam(paramList, param, isRequired, NO_COMMENTS_FOUND + appendComment, since, strRequired);
+                        commonHandleParam(paramList, param, isRequired, fieldName + appendComment, since, strRequired);
                     }
                     StringBuilder preBuilder = new StringBuilder();
                     for (int j = 0; j < level; j++) {

@@ -117,9 +117,9 @@ public class JsonBuildHelper {
         if (JavaClassValidateUtil.isPrimitive(typeName)) {
             return StringUtil.removeQuotes(DocUtil.jsonValueByType(typeName));
         }
-        if (javaClass.isEnum()) {
-            return String.valueOf(JavaClassUtil.getEnumValue(javaClass, Boolean.FALSE));
-        }
+//        if (javaClass.isEnum()) {
+//            return String.valueOf(JavaClassUtil.getEnumValue(javaClass, Boolean.FALSE));
+//        }
         boolean skipTransientField = apiConfig.isSkipTransientField();
         StringBuilder data0 = new StringBuilder();
         JavaClass cls = builder.getClassByName(typeName);
@@ -327,11 +327,11 @@ public class JsonBuildHelper {
                                     continue out;
                                 }
                                 JavaClass arraySubClass = builder.getJavaProjectBuilder().getClassByName(gicName);
-                                if (arraySubClass.isEnum()) {
-                                    Object value = JavaClassUtil.getEnumValue(arraySubClass, Boolean.FALSE);
-                                    data0.append("[").append(value).append("],");
-                                    continue out;
-                                }
+//                                if (arraySubClass.isEnum()) {
+//                                    Object value = JavaClassUtil.getEnumValue(arraySubClass, Boolean.FALSE);
+//                                    data0.append("[").append(value).append("],");
+//                                    continue out;
+//                                }
                                 data0.append("[").append(buildJson(gicName, fieldGicName, isResp, nextLevel, registryClasses, builder, methodTags)).append("]").append(",");
                             } else {
                                 data0.append("[{\"$ref\":\"..\"}]").append(",");

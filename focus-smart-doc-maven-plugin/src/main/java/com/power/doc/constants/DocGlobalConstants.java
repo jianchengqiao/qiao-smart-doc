@@ -161,7 +161,7 @@ public interface DocGlobalConstants {
 
     String ANY_OBJECT_MSG = "any object.";
 
-    String NO_COMMENTS_FOUND = "No comments found.";
+    String NO_COMMENTS_FOUND = "未定义";
 
     String SPRING_WEB_ANNOTATION_PACKAGE = "org.springframework.web.bind.annotation";
 
