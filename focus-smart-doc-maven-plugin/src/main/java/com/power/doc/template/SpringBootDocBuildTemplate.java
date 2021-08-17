@@ -69,6 +69,9 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                     continue;
                 }
             }
+            if (cls.getComment() == null || cls.getComment().trim().isEmpty()) {
+                continue;
+            }
             DocletTag ignoreTag = cls.getTagByName(IGNORE);
             if (!checkController(cls) || ignoreTag != null) {
                 continue;
@@ -79,6 +82,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 setCustomOrder = true;
                 order = Integer.parseInt(strOrder);
             }
+
             List<ApiMethodDoc> apiMethodDocs = buildControllerMethod(cls, apiConfig, projectBuilder);
             this.handleApiDoc(cls, apiDocList, apiMethodDocs, order, apiConfig.isMd5EncryptedHtmlName());
         }
@@ -148,6 +152,9 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
         int methodOrder = 0;
         for (DocJavaMethod docJavaMethod : docJavaMethods) {
             JavaMethod method = docJavaMethod.getJavaMethod();
+            if (method.getComment() == null || method.getComment().trim().isEmpty()) {
+                continue;
+            }
             if (method.isPrivate() || Objects.nonNull(method.getTagByName(IGNORE))) {
                 continue;
             }
@@ -157,7 +164,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             }
             //handle request mapping
             RequestMapping requestMapping = new SpringMVCRequestMappingHandler()
-                    .handle(projectBuilder, serverUrl,baseUrl, method, constantsMap);
+                    .handle(projectBuilder, serverUrl, baseUrl, method, constantsMap);
             if (Objects.isNull(requestMapping)) {
                 continue;
             }
@@ -165,6 +172,8 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 throw new RuntimeException("Unable to find comment for method " + method.getName() + " in " + cls.getCanonicalName());
             }
             ApiMethodDoc apiMethodDoc = new ApiMethodDoc();
+            boolean isKafka = EmptyUtil.notEmpty(cls.getTagsByName(KAFKA)) || method.getTagByName(KAFKA) != null;
+            apiMethodDoc.setKafka(isKafka);
             DocletTag downloadTag = method.getTagByName(DocTags.DOWNLOAD);
             if (Objects.nonNull(downloadTag)) {
                 apiMethodDoc.setDownload(true);
@@ -208,36 +217,41 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             apiMethodDoc.setServerUrl(serverUrl);
             apiMethodDoc.setPath(requestMapping.getShortUrl());
             apiMethodDoc.setDeprecated(requestMapping.isDeprecated());
-            ApiMethodReqParam apiMethodReqParam = requestParams(docJavaMethod, projectBuilder);
-            // build request params
-            if (paramsDataToTree) {
-                apiMethodDoc.setPathParams(ApiParamTreeUtil.apiParamToTree(apiMethodReqParam.getPathParams()));
-                apiMethodDoc.setQueryParams(ApiParamTreeUtil.apiParamToTree(apiMethodReqParam.getQueryParams()));
-                apiMethodDoc.setRequestParams(ApiParamTreeUtil.apiParamToTree(apiMethodReqParam.getRequestParams()));
-            } else {
-                apiMethodDoc.setPathParams(apiMethodReqParam.getPathParams());
-                apiMethodDoc.setQueryParams(apiMethodReqParam.getQueryParams());
-                apiMethodDoc.setRequestParams(apiMethodReqParam.getRequestParams());
+            if (isKafka) {
+                apiMethodDoc.setTopic(requestMapping.getShortUrl().substring(requestMapping.getShortUrl().lastIndexOf("/") + 1));
             }
+            if (!isKafka) {
+                ApiMethodReqParam apiMethodReqParam = requestParams(docJavaMethod, projectBuilder);
+                // build request params
+                if (paramsDataToTree) {
+                    apiMethodDoc.setPathParams(ApiParamTreeUtil.apiParamToTree(apiMethodReqParam.getPathParams()));
+                    apiMethodDoc.setQueryParams(ApiParamTreeUtil.apiParamToTree(apiMethodReqParam.getQueryParams()));
+                    apiMethodDoc.setRequestParams(ApiParamTreeUtil.apiParamToTree(apiMethodReqParam.getRequestParams()));
+                } else {
+                    apiMethodDoc.setPathParams(apiMethodReqParam.getPathParams());
+                    apiMethodDoc.setQueryParams(apiMethodReqParam.getQueryParams());
+                    apiMethodDoc.setRequestParams(apiMethodReqParam.getRequestParams());
+                }
 
-            List<ApiReqHeader> allApiReqHeaders;
-            if (this.headers != null) {
-                allApiReqHeaders = Stream.of(this.headers, apiReqHeaders)
-                        .flatMap(Collection::stream).distinct().collect(Collectors.toList());
-            } else {
-                allApiReqHeaders = apiReqHeaders;
+                List<ApiReqHeader> allApiReqHeaders;
+                if (this.headers != null) {
+                    allApiReqHeaders = Stream.of(this.headers, apiReqHeaders)
+                            .flatMap(Collection::stream).distinct().collect(Collectors.toList());
+                } else {
+                    allApiReqHeaders = apiReqHeaders;
+                }
+                //reduce create in template
+                apiMethodDoc.setHeaders(this.createDocRenderHeaders(allApiReqHeaders, apiConfig.isAdoc()));
+                apiMethodDoc.setRequestHeaders(allApiReqHeaders);
+
+                // build request json
+                ApiRequestExample requestExample = buildReqJson(docJavaMethod, apiMethodDoc, requestMapping.getMethodType(),
+                        projectBuilder);
+                String requestJson = requestExample.getExampleBody();
+                // set request example detail
+                apiMethodDoc.setRequestExample(requestExample);
+                apiMethodDoc.setRequestUsage(requestJson == null ? requestExample.getUrl() : requestJson);
             }
-            //reduce create in template
-            apiMethodDoc.setHeaders(this.createDocRenderHeaders(allApiReqHeaders, apiConfig.isAdoc()));
-            apiMethodDoc.setRequestHeaders(allApiReqHeaders);
-
-            // build request json
-            ApiRequestExample requestExample = buildReqJson(docJavaMethod, apiMethodDoc, requestMapping.getMethodType(),
-                    projectBuilder);
-            String requestJson = requestExample.getExampleBody();
-            // set request example detail
-            apiMethodDoc.setRequestExample(requestExample);
-            apiMethodDoc.setRequestUsage(requestJson == null ? requestExample.getUrl() : requestJson);
             // build response usage
             apiMethodDoc.setResponseUsage(JsonBuildHelper.buildReturnJson(docJavaMethod, projectBuilder));
             // build response params

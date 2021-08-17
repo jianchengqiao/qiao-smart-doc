@@ -111,6 +111,11 @@ public interface DocTags {
      */
     String IGNORE_PARAMS = "ignoreParams";
 
+    /**
+     * custom @kafka tag
+     */
+    String KAFKA = "kafka";
+
 
     /**
      * Ignore ResponseBodyAdvice

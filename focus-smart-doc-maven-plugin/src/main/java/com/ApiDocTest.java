@@ -68,6 +68,7 @@ public class ApiDocTest {
                 RevisionLog.builder().setRevisionTime("2018/12/15").setAuthor("chen").setRemarks("测试").setStatus("创建").setVersion("V1.0"),
                 RevisionLog.builder().setRevisionTime("2018/12/16").setAuthor("chen2").setRemarks("测试2").setStatus("修改").setVersion("V2.0")
         );
+        config.setDescriptions(Arrays.asList("1. 本页接口都需要token","2. 本页接口都需要token"));
 //        config.setResponseBodyAdvice(ResponseBodyAdvice.builder()
 //                .setDataField("data")
 //                .setDataField("dadada")

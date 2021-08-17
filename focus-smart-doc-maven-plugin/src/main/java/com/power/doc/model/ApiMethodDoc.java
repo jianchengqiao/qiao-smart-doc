@@ -187,6 +187,26 @@ public class ApiMethodDoc implements Serializable {
      */
     private boolean listParam = false;
 
+    private boolean kafka;
+
+    private String topic;
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public boolean isKafka() {
+        return kafka;
+    }
+
+    public void setKafka(boolean kafka) {
+        this.kafka = kafka;
+    }
+
     public boolean isListParam() {
         return listParam;
     }

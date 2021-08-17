@@ -59,10 +59,20 @@ public class ApiDoc implements Comparable<ApiDoc> {
      */
     private String desc;
 
+    private String detail;
+
     /**
      * link
      */
     private String link;
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
 
     public String getName() {
         return name;

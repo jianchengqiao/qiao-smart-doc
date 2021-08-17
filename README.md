@@ -4,7 +4,7 @@
 
 ### 说明
 * 根据 Controller、Method、传入参数、返回值的 ***JavaDoc注释***
-  自动生成文档，一定要写好注释
+  自动生成文档，没有注释的 Controller、Method 不会生成对应文档
 * 默认会生成文档的请求、响应示例，建议在每个参数注释后加上 **"|"**
   mock示例数据，可覆盖随机mock
 * 是否必填 ***Required*** 会根据 ***@RequestParam*** ***@NotNull***
@@ -101,15 +101,15 @@ smart-doc.json:
 
 |         JavaDoc tag          |                      可用位置                     |               说明                |
 |       ----          |                    ----                       |                 -----            |
-| @order *100*         | Controller                                       |  文档排序          |
+| @order *100*         | Controller                                       |  左侧文档目录排序          |
 | @author *Qiao*      | Controller <br> Method                            |  作者             |
 | @serverUrl *http://...*      | Controller <br> Method                            |  指定serverUrl，会覆盖config里的serverUrl，用于从zuul路由过来的情况，可填写来源服务的url |
+| @kafka     | Controller <br> Method                            |  标记 ***Controller*** 或 ***Method*** 标记为kafka文档，只生成 ***Topic*** 和 ***Response*** |
+| @apiNode *详细说明*         | Controller <br> Method                                       |  对本页文档或本方法的详细说明          |
 | @ignore <br> @ignore *editEstate* | Controller <br> Method <br> Filed | 忽略 ***Controller*** 、***Method*** 、***Filed*** ，不生成其文档。 <br> 作用在 ***Filed*** 时，若有分组，则只有与 ***Method*** 分组相同的字段才忽略。 |
 | @group *editEstate*       | Method                                            | 方法分组，配合 ***@ignore*** 使用，可忽略某个分组下的字段 |
 | @ignoreParams *groupId,estateId*         | Method                                       |  忽略方法的一些参数，不生成文档          |
-| @apiNode *方法详细说明*         |   Method                                       |  方法详细说明          |
 | @param **estateId**  *楼盘id，所有楼盘接口必填\|10086*         |   Method                                       |  参数说明，其中 ***\|*** 后面为mock请求响应示例的值，不写则根据配置随机mock或null          |
-| @apiNode *方法详细说明*         |   Method                                       |  方法详细说明          |
 | @page */tool/trial.html*         |   Method                                       |  标记该方法为一个页面，点击 ***Send Request*** 会打开这个页面          |
 | @download          |   Method                                       |  标记该方法为下载请求，点击 ***Send Request*** 会下载文件          |
 | @mock *10086*         |   Filed                                       |  mock请求或响应示例，或者字段的 ***注释\|10086*** 也能实现mock值          |

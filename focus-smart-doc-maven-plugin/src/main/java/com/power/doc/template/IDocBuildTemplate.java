@@ -22,25 +22,18 @@
  */
 package com.power.doc.template;
 
-import com.power.common.util.CollectionUtil;
-import com.power.common.util.StringUtil;
-import com.power.doc.builder.ProjectDocConfigBuilder;
-import com.power.doc.constants.DocTags;
-import com.power.doc.helper.ParamsBuildHelper;
+import com.power.common.util.*;
+import com.power.doc.builder.*;
+import com.power.doc.constants.*;
+import com.power.doc.helper.*;
 import com.power.doc.model.*;
-import com.power.doc.utils.DocClassUtil;
-import com.power.doc.utils.DocUtil;
-import com.power.doc.utils.JavaClassValidateUtil;
-import com.power.doc.utils.OpenApiSchemaUtil;
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaType;
+import com.power.doc.utils.*;
+import com.thoughtworks.qdox.model.*;
 
 import java.util.*;
 
-import static com.power.doc.constants.DocGlobalConstants.NO_COMMENTS_FOUND;
-import static com.power.doc.constants.DocTags.IGNORE_RESPONSE_BODY_ADVICE;
+import static com.power.doc.constants.DocGlobalConstants.*;
+import static com.power.doc.constants.DocTags.*;
 
 /**
  * @author yu 2019/12/21.
@@ -89,6 +82,10 @@ public interface IDocBuildTemplate<T> {
         }
         String desc = DocUtil.getEscapeAndCleanComment(cls.getComment());
         apiDoc.setDesc(desc);
+        DocletTag apiNode = cls.getTagByName(API_NOTE);
+        if (apiNode != null && EmptyUtil.notEmpty(apiNode.getValue())) {
+            apiDoc.setDetail(apiNode.getValue());
+        }
         apiDoc.setList(apiMethodDocs);
         apiDocList.add(apiDoc);
     }
