@@ -110,7 +110,7 @@ smart-doc.json:
 | @group *editEstate*       | Method                                            | 方法分组，配合 ***@ignore*** 使用，可忽略某个分组下的字段 |
 | @ignoreParams *groupId,estateId*         | Method                                       |  忽略方法的一些参数，不生成文档          |
 | @param **estateId**  *楼盘id，所有楼盘接口必填\|10086*         |   Method                                       |  参数说明，其中 ***\|*** 后面为mock请求响应示例的值，不写则根据配置随机mock或null          |
-| @page */tool/trial.html*         |   Method                                       |  标记该方法为一个页面，点击 ***Send Request*** 会打开这个页面          |
+| @page */tool/trial.html*         |   Method                                      |  标记该方法为一个页面，点击 ***Send Request*** 会打开这个页面          |
 | @download          |   Method                                       |  标记该方法为下载请求，点击 ***Send Request*** 会下载文件          |
 | @mock *10086*         |   Filed                                       |  mock请求或响应示例，或者字段的 ***注释\|10086*** 也能实现mock值          |
 | @required         |   Filed                                       |  强制为必填参数，建议使用 ***NotNull*** 系列注解来控制是否必填          |
