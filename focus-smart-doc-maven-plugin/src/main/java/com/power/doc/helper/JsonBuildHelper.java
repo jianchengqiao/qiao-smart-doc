@@ -30,6 +30,7 @@ import com.power.doc.utils.*;
 import com.thoughtworks.qdox.model.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import static com.power.doc.constants.DocTags.*;
 
@@ -191,6 +192,7 @@ public class JsonBuildHelper {
             boolean responseFieldToUnderline = builder.getApiConfig().isResponseFieldToUnderline();
             List<DocJavaField> fields = JavaClassUtil.getFields(cls, 0, new LinkedHashMap<>());
             String methodGroupValue = methodTags == null ? null : methodTags.stream().filter(t -> DocTags.GROUP.equals(t.getName())).findAny().map(DocletTag::getValue).orElse(null);
+            String classIgnore = cls == null ? "" : cls.getTagsByName(IGNORE).stream().map(DocletTag::getValue).collect(Collectors.joining(","));
             out:
             for (DocJavaField docField : fields) {
                 JavaField field = docField.getJavaField();
@@ -207,9 +209,10 @@ public class JsonBuildHelper {
                     fieldName = StringUtil.camelToUnderline(fieldName);
                 }
                 Map<String, String> tagsMap = DocUtil.getFieldTagsValue(field, docField);
-                if (tagsMap.containsKey(DocTags.IGNORE)) {
-                    String groupValue = tagsMap.get(DocTags.IGNORE);
-                    if (StringUtil.isEmpty(groupValue) ||StringUtil.isEmpty(methodGroupValue) || groupValue.contains(methodGroupValue)) {
+
+                String fieldIgnore = tagsMap.get(DocTags.IGNORE);
+                if (tagsMap.containsKey(DocTags.IGNORE) || EmptyUtil.notEmpty(classIgnore)) {
+                    if (StringUtil.isEmpty(fieldIgnore) || (methodGroupValue != null && !methodGroupValue.trim().isEmpty() && (fieldIgnore.contains(methodGroupValue) || classIgnore.contains(methodGroupValue)))) {
                         continue out;
                     }
                 }

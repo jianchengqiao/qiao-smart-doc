@@ -22,29 +22,23 @@ public class ApiDocTest {
      */
     public static void testBuilderControllersApi() {
         ApiConfig config = new ApiConfig();
-        config.setCoverOld(true);
-        config.setCreateDebugPage(true);
-        config.setAllInOneDocFileName("index.html");
-        config.setServerUrl("http://localhost:8080");
-        config.setAllInOne(true);
+//        config.setCoverOld(true);
+//        config.setCreateDebugPage(true);
+//        config.setAllInOneDocFileName("index.html");
+//        config.setAllInOne(true);
         config.setOutPath("/Users/Qiao/Desktop/doc");
-        config.setMd5EncryptedHtmlName(true);
-        config.setRequestExample(true);
-        config.setResponseExample(true);
-        config.setRecursionLimit(3);
-        config.setRandomMock(true);
         //不指定SourcePaths默认加载代码为项目src/main/java下的
+//        config.setPackageFilters("cn.focus.group.estate.controller.docc");
         config.setSourceCodePaths(
                 SourceCodePath.builder().setDesc("智慧案场")
-                        .setPath("/Users/Qiao/Documents/IdeaProjects/sc-data/code/src/main/java")
+                        .setPath("/Users/Qiao/Documents/IdeaProjects/group-estate/code/src/main/java")
         );
-        config.setPackageFilters("cn.focus.sc.data.controller.doc");
         //设置请求头，如果没有请求头，可以不用设置
 //        config.setRequestHeaders(
 //                ApiReqHeader.header().setName("access_token").setType("string").setDesc("Basic auth credentials"),
 //                ApiReqHeader.header().setName("user_uuid").setType("string").setDesc("User Uuid key")
 //        );
-        config.setStyle("xt256");
+//        config.setStyle("xt256");
 //        对于外部jar的类，api-doc目前无法自动获取注释，
 //        如果有这种场景，则自己添加字段和注释，api-doc后期遇到同名字段则直接给相应字段加注释
 //        config.setCustomResponseFields(
@@ -64,11 +58,11 @@ public class ApiDocTest {
 //
 //        );
         //非必须只有当setAllInOne设置为true时文档变更记录才生效，https://gitee.com/sunyurepository/ApplicationPower/issues/IPS4O
-        config.setRevisionLogs(
-                RevisionLog.builder().setRevisionTime("2018/12/15").setAuthor("chen").setRemarks("测试").setStatus("创建").setVersion("V1.0"),
-                RevisionLog.builder().setRevisionTime("2018/12/16").setAuthor("chen2").setRemarks("测试2").setStatus("修改").setVersion("V2.0")
-        );
-        config.setDescriptions(Arrays.asList("1. 本页接口都需要token","2. 本页接口都需要token"));
+//        config.setRevisionLogs(
+//                RevisionLog.builder().setRevisionTime("2018/12/15").setAuthor("chen").setRemarks("测试").setStatus("创建").setVersion("V1.0"),
+//                RevisionLog.builder().setRevisionTime("2018/12/16").setAuthor("chen2").setRemarks("测试2").setStatus("修改").setVersion("V2.0")
+//        );
+//        config.setDescriptions(Arrays.asList("1. 本页接口都需要token","2. 本页接口都需要token"));
 //        config.setResponseBodyAdvice(ResponseBodyAdvice.builder()
 //                .setDataField("data")
 //                .setDataField("dadada")

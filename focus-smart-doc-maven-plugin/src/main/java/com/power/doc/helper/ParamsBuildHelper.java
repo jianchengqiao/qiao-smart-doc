@@ -106,6 +106,7 @@ public class ParamsBuildHelper {
                     registryClasses, projectBuilder, groupClasses, pid, jsonRequest, methodTags));
         } else {
             String methodGroupValue = methodTags == null ? null : methodTags.stream().filter(t -> DocTags.GROUP.equals(t.getName())).findAny().map(DocletTag::getValue).orElse(null);
+            String classIgnore = cls == null ? "" : cls.getTagsByName(DocTags.IGNORE).stream().map(DocletTag::getValue).collect(Collectors.joining(","));
             out:
             for (DocJavaField docField : fields) {
                 JavaField field = docField.getJavaField();
@@ -128,12 +129,14 @@ public class ParamsBuildHelper {
 
                 Map<String, String> tagsMap = DocUtil.getFieldTagsValue(field, docField);
                 String since = DocGlobalConstants.DEFAULT_VERSION;//since tag value
-                if (tagsMap.containsKey(DocTags.IGNORE)) {
-                    String groupValue = tagsMap.get(DocTags.IGNORE);
-                    if (StringUtil.isEmpty(groupValue) ||StringUtil.isEmpty(methodGroupValue) || groupValue.contains(methodGroupValue)) {
+
+                String fieldIgnore = tagsMap.get(DocTags.IGNORE);
+                if (tagsMap.containsKey(DocTags.IGNORE) || EmptyUtil.notEmpty(classIgnore)) {
+                    if (StringUtil.isEmpty(fieldIgnore) || (methodGroupValue != null && !methodGroupValue.trim().isEmpty() && (fieldIgnore.contains(methodGroupValue) || classIgnore.contains(methodGroupValue)))) {
                         continue out;
                     }
-                } else if (tagsMap.containsKey(DocTags.SINCE)) {
+                }
+                if (tagsMap.containsKey(DocTags.SINCE)) {
                     since = tagsMap.get(DocTags.SINCE);
                 }
                 boolean strRequired = false;
