@@ -28,7 +28,7 @@ public class ApiDocTest {
 //        config.setAllInOne(true);
         config.setOutPath("/Users/Qiao/Desktop/doc");
         //不指定SourcePaths默认加载代码为项目src/main/java下的
-//        config.setPackageFilters("cn.focus.group.estate.controller.docc");
+        config.setPackageFilters("cn.focus.group.estate.controller.docc");
         config.setSourceCodePaths(
                 SourceCodePath.builder().setDesc("智慧案场")
                         .setPath("/Users/Qiao/Documents/IdeaProjects/group-estate/code/src/main/java")

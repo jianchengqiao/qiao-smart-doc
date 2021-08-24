@@ -22,17 +22,14 @@
  */
 package com.power.doc.model;
 
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.JavaAnnotation;
-import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author yu 2020/3/19.
  */
-public class DocJavaField  {
+public class DocJavaField implements Comparable<DocJavaField> {
 
     /**
      * field info
@@ -79,8 +76,20 @@ public class DocJavaField  {
 
     private boolean isEnum;
 
-    public static DocJavaField builder() {
-        return new DocJavaField();
+    private int order;
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public static DocJavaField builder(int order) {
+        DocJavaField docJavaField = new DocJavaField();
+        docJavaField.setOrder(order);
+        return docJavaField;
     }
 
     public JavaField getJavaField() {
@@ -136,6 +145,28 @@ public class DocJavaField  {
     }
 
     public DocJavaField setDocletTags(List<DocletTag> docletTags) {
+        if (docletTags == null) {
+            this.docletTags = new ArrayList<>();
+        } else {
+            this.docletTags = docletTags;
+        }
+        return this;
+    }
+
+    public DocJavaField addDocletTags(List<DocletTag> docletTags) {
+        if (this.docletTags == null) {
+            this.docletTags = docletTags;
+        } else {
+            out:
+            for (DocletTag newTag : docletTags) {
+                for (DocletTag thisTag : this.docletTags) {
+                    if (thisTag.getName().equals(newTag.getName())&&thisTag.getValue().equals(newTag.getValue())){
+                        continue out;
+                    }
+                }
+                this.docletTags.add(newTag);
+            }
+        }
         this.docletTags = docletTags;
         return this;
     }
@@ -198,5 +229,15 @@ public class DocJavaField  {
 
     public void setEnum(boolean anEnum) {
         isEnum = anEnum;
+    }
+
+    @Override
+    public int compareTo(DocJavaField o) {
+        return this.getOrder() - o.getOrder();
+    }
+
+    @Override
+    public String toString() {
+        return javaField.getName();
     }
 }

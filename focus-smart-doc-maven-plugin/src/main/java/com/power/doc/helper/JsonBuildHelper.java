@@ -192,7 +192,6 @@ public class JsonBuildHelper {
             boolean responseFieldToUnderline = builder.getApiConfig().isResponseFieldToUnderline();
             List<DocJavaField> fields = JavaClassUtil.getFields(cls, 0, new LinkedHashMap<>());
             String methodGroupValue = methodTags == null ? null : methodTags.stream().filter(t -> DocTags.GROUP.equals(t.getName())).findAny().map(DocletTag::getValue).orElse(null);
-            String classIgnore = cls == null ? "" : cls.getTagsByName(IGNORE).stream().map(DocletTag::getValue).collect(Collectors.joining(","));
             out:
             for (DocJavaField docField : fields) {
                 JavaField field = docField.getJavaField();
@@ -211,8 +210,8 @@ public class JsonBuildHelper {
                 Map<String, String> tagsMap = DocUtil.getFieldTagsValue(field, docField);
 
                 String fieldIgnore = tagsMap.get(DocTags.IGNORE);
-                if (tagsMap.containsKey(DocTags.IGNORE) || EmptyUtil.notEmpty(classIgnore)) {
-                    if (StringUtil.isEmpty(fieldIgnore) || (methodGroupValue != null && !methodGroupValue.trim().isEmpty() && (fieldIgnore.contains(methodGroupValue) || classIgnore.contains(methodGroupValue)))) {
+                if (tagsMap.containsKey(DocTags.IGNORE)) {
+                    if (StringUtil.isEmpty(fieldIgnore) || (methodGroupValue != null && !methodGroupValue.trim().isEmpty() && fieldIgnore.contains(methodGroupValue))) {
                         continue out;
                     }
                 }

@@ -106,7 +106,6 @@ public class ParamsBuildHelper {
                     registryClasses, projectBuilder, groupClasses, pid, jsonRequest, methodTags));
         } else {
             String methodGroupValue = methodTags == null ? null : methodTags.stream().filter(t -> DocTags.GROUP.equals(t.getName())).findAny().map(DocletTag::getValue).orElse(null);
-            String classIgnore = cls == null ? "" : cls.getTagsByName(DocTags.IGNORE).stream().map(DocletTag::getValue).collect(Collectors.joining(","));
             out:
             for (DocJavaField docField : fields) {
                 JavaField field = docField.getJavaField();
@@ -131,8 +130,8 @@ public class ParamsBuildHelper {
                 String since = DocGlobalConstants.DEFAULT_VERSION;//since tag value
 
                 String fieldIgnore = tagsMap.get(DocTags.IGNORE);
-                if (tagsMap.containsKey(DocTags.IGNORE) || EmptyUtil.notEmpty(classIgnore)) {
-                    if (StringUtil.isEmpty(fieldIgnore) || (methodGroupValue != null && !methodGroupValue.trim().isEmpty() && (fieldIgnore.contains(methodGroupValue) || classIgnore.contains(methodGroupValue)))) {
+                if (tagsMap.containsKey(DocTags.IGNORE)) {
+                    if (StringUtil.isEmpty(fieldIgnore) || (methodGroupValue != null && !methodGroupValue.trim().isEmpty() && fieldIgnore.contains(methodGroupValue))) {
                         continue out;
                     }
                 }
@@ -451,6 +450,13 @@ public class ParamsBuildHelper {
             }//end field
         }
         return paramList;
+    }
+
+    private static List<String> getIgnoreFields(JavaClass cls, String methodGroupValue) {
+        if (EmptyUtil.isEmpty(methodGroupValue)){
+
+        }
+        return null;
     }
 
     public static String dictionaryListComment(ApiDataDictionary dictionary) {

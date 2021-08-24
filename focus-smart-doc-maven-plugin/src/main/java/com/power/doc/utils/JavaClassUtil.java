@@ -32,6 +32,7 @@ import com.thoughtworks.qdox.type.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
 /**
@@ -49,7 +50,9 @@ public class JavaClassUtil {
      * @param addedFields added fields,Field deduplication
      * @return list of JavaField
      */
-    public static List<DocJavaField> getFields(JavaClass cls1, int counter, Map<String, DocJavaField> addedFields) {
+    private static AtomicInteger count = new AtomicInteger(100000);
+
+    public static List<DocJavaField> getFields(JavaClass cls1, int counter, LinkedHashMap<String, DocJavaField> addedFields) {
         List<DocJavaField> fieldList = new ArrayList<>();
         if (null == cls1) {
             return fieldList;
@@ -60,6 +63,8 @@ public class JavaClassUtil {
                 || "ZonedDateTime".equals(cls1.getSimpleName())) {
             return fieldList;
         } else {
+            List<DocletTag> classIgnores = cls1.getTagsByName(DocTags.IGNORE);
+
             String className = cls1.getFullyQualifiedName();
             if (cls1.isInterface() &&
                     !JavaClassValidateUtil.isCollection(className) &&
@@ -81,13 +86,25 @@ public class JavaClassUtil {
                     }
                     String comment = javaMethod.getComment();
                     JavaField javaField = new DefaultJavaField(javaMethod.getReturns(), methodName);
-                    DocJavaField docJavaField = DocJavaField.builder()
+                    DocletTag orderTag = javaMethod.getTagByName(DocTags.ORDER);
+                    int order = -1;
+                    if (orderTag != null) {
+                        String value = orderTag.getValue();
+                        try {
+                            order = Integer.parseInt(value.trim());
+                        } catch (Exception ignore) {
+                        }
+                    }
+                    DocJavaField docJavaField = DocJavaField.builder(order == -1 ? count.get() : order)
                             .setJavaField(javaField)
                             .setComment(comment)
                             .setDocletTags(javaMethod.getTags())
                             .setAnnotations(javaMethod.getAnnotations())
                             .setFullyQualifiedName(javaField.getType().getFullyQualifiedName())
                             .setGenericCanonicalName(javaField.getType().getGenericCanonicalName());
+                    if (EmptyUtil.notEmpty(classIgnores)) {
+                        docJavaField.addDocletTags(classIgnores);
+                    }
                     addedFields.put(methodName, docJavaField);
                 }
             }
@@ -101,6 +118,7 @@ public class JavaClassUtil {
                     getFields(javaClass, counter, addedFields);
                 }
             }
+            count.decrementAndGet();
             Map<String, JavaType> actualJavaTypes = getActualTypesMap(cls1);
             List<JavaMethod> javaMethods = cls1.getMethods();
             for (JavaMethod method : javaMethods) {
@@ -122,15 +140,27 @@ public class JavaClassUtil {
                     DocJavaField docJavaField = addedFields.get(methodName);
                     docJavaField.setAnnotations(method.getAnnotations());
                     docJavaField.setComment(comment);
+                    if (EmptyUtil.notEmpty(classIgnores)) {
+                        docJavaField.addDocletTags(classIgnores);
+                    }
                     addedFields.put(methodName, docJavaField);
                 }
             }
             for (JavaField javaField : cls1.getFields()) {
-                if (javaField.isStatic()||javaField.isEnumConstant()||javaField.isNative()){
+                if (javaField.isStatic() || javaField.isEnumConstant() || javaField.isNative()) {
                     continue;
                 }
+                DocletTag orderTag = javaField.getTagByName(DocTags.ORDER);
+                int order = -1;
+                if (orderTag != null) {
+                    String value = orderTag.getValue();
+                    try {
+                        order = Integer.parseInt(value.trim());
+                    } catch (Exception ignore) {
+                    }
+                }
                 String fieldName = javaField.getName();
-                DocJavaField docJavaField = DocJavaField.builder();
+                DocJavaField docJavaField = DocJavaField.builder(order == -1 ? count.get() : order);
                 boolean typeChecked = false;
                 String gicName = javaField.getType().getGenericCanonicalName();
                 String subTypeName = javaField.getType().getFullyQualifiedName();
@@ -163,9 +193,13 @@ public class JavaClassUtil {
                     }
                 }
                 docJavaField.setComment(javaField.getComment())
+                        .setDocletTags(javaField.getTags())
                         .setJavaField(javaField).setFullyQualifiedName(subTypeName)
                         .setGenericCanonicalName(gicName).setActualJavaType(actualType)
                         .setAnnotations(javaField.getAnnotations());
+                if (EmptyUtil.notEmpty(classIgnores)) {
+                    docJavaField.addDocletTags(classIgnores);
+                }
                 if (addedFields.containsKey(fieldName)) {
                     addedFields.put(fieldName, docJavaField);
                     continue;
@@ -173,7 +207,7 @@ public class JavaClassUtil {
                 addedFields.put(fieldName, docJavaField);
             }
             List<DocJavaField> parentFieldList = addedFields.values().stream()
-                    .filter(v -> Objects.nonNull(v)).collect(Collectors.toList());
+                    .filter(Objects::nonNull).sorted().collect(Collectors.toList());
             fieldList.addAll(parentFieldList);
         }
         return fieldList;
