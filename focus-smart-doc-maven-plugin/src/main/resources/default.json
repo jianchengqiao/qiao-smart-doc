@@ -23,48 +23,6 @@
       "enumClassName": "cn.focus.sc.data.enums.SourceEnum",
       "codeField": "code",
       "descField": "name"
-    },
-    {
-      "title": "获取方式",
-      "enumClassName": "cn.focus.sc.data.enums.SourceActionEnum",
-      "codeField": "code",
-      "descField": "name"
-    },
-    {
-      "title": "标记",
-      "enumClassName": "cn.focus.sc.data.enums.MarkEnum",
-      "codeField": "code",
-      "descField": "name"
-    },
-    {
-      "title": "看房状态",
-      "enumClassName": "cn.focus.sc.data.enums.ProcessEnum",
-      "codeField": "code",
-      "descField": "name"
-    },
-    {
-      "title": "客户意向",
-      "enumClassName": "cn.focus.sc.data.enums.IntentEnum",
-      "codeField": "code",
-      "descField": "name"
-    },
-    {
-      "title": "获取类型",
-      "enumClassName": "cn.focus.sc.data.enums.ReceiveTypeEnum",
-      "codeField": "code",
-      "descField": "name"
-    },
-    {
-      "title": "排序方式",
-      "enumClassName": "cn.focus.sc.data.enums.ClientSortEnum",
-      "codeField": "code",
-      "descField": "name"
-    },
-    {
-      "title": "性别",
-      "enumClassName": "cn.focus.sc.data.enums.GenderEnum",
-      "codeField": "code",
-      "descField": "name"
     }
   ],
   "errorCodeDictionaries": [

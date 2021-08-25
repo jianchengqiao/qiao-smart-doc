@@ -132,6 +132,7 @@
                 <%}else{%>
                 <div class="paragraph" id="${doc.methodId}-url" data-url="${doc.url}" data-download="${doc.download}"
                      data-page="${doc.page}"><p><strong>Url:</strong>&nbsp;${doc.type}&nbsp;<a href="${doc.url}">${doc.url}</a></p></div>
+                <div class="paragraph" id="${doc.methodId}-method" data-method="${doc.type}"></div>
                 <%}%>
                 <%if(isNotEmpty(doc.author)){%>
                 <div class="paragraph"><p><strong>Author:</strong>&nbsp;${doc.author}</p></div>

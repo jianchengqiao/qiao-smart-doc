@@ -22,43 +22,29 @@
  */
 package com.smartdoc.mojo;
 
-import com.power.common.constants.Charset;
-import com.power.common.util.CollectionUtil;
-import com.power.common.util.DateTimeUtil;
-import com.power.common.util.RegexUtil;
-import com.power.common.util.StringUtil;
-import com.power.doc.model.ApiConfig;
-import com.smartdoc.constant.GlobalConstants;
-import com.smartdoc.util.ArtifactFilterUtil;
-import com.smartdoc.util.ClassLoaderUtil;
+import com.power.common.constants.*;
+import com.power.common.util.*;
+import com.power.doc.model.*;
+import com.power.doc.utils.*;
+import com.smartdoc.constant.*;
 import com.smartdoc.util.FileUtil;
-import com.smartdoc.util.MojoUtils;
-import com.thoughtworks.qdox.JavaProjectBuilder;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
-import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.RepositorySystem;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
-import org.apache.maven.shared.dependency.graph.DependencyNode;
+import com.smartdoc.util.*;
+import com.thoughtworks.qdox.*;
+import org.apache.maven.artifact.*;
+import org.apache.maven.artifact.repository.*;
+import org.apache.maven.artifact.resolver.*;
+import org.apache.maven.artifact.resolver.filter.*;
+import org.apache.maven.execution.*;
+import org.apache.maven.plugin.*;
+import org.apache.maven.plugins.annotations.*;
+import org.apache.maven.project.*;
+import org.apache.maven.repository.*;
+import org.apache.maven.shared.dependency.graph.*;
 
-import java.io.File;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.jar.*;
 
 
 /**
@@ -89,6 +75,9 @@ public abstract class BaseDocsGeneratorMojo extends AbstractMojo {
 
     @Parameter(property = "configFile", defaultValue = GlobalConstants.DEFAULT_CONFIG)
     private File configFile;
+
+    @Parameter(property = "serverUrl")
+    private String serverUrl;
 
     @Parameter(property = "projectName")
     private String projectName;
@@ -132,6 +121,9 @@ public abstract class BaseDocsGeneratorMojo extends AbstractMojo {
         if (Objects.isNull(apiConfig)) {
             this.getLog().info(GlobalConstants.ERROR_MSG);
             return;
+        }
+        if (EmptyUtil.notEmpty(serverUrl)) {
+            apiConfig.setServerUrl(serverUrl);
         }
         String rpcConsumerConfig = apiConfig.getRpcConsumerConfig();
         if (!FileUtil.isAbsPath(rpcConsumerConfig) && StringUtil.isNotEmpty(rpcConsumerConfig)) {

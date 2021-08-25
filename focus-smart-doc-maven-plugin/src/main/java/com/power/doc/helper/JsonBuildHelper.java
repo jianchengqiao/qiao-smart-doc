@@ -259,7 +259,13 @@ public class JsonBuildHelper {
                     if (comment !=null&& comment.contains("|")){
                         String[] split = comment.split("\\|");
                         if (split.length>1){
-                            fieldValue = DocUtil.handleJsonStr(split[1]);
+                            fieldValue = split[1];
+                            if (!DocUtil.javaPrimaryType(typeSimpleName)
+                                    && !JavaClassValidateUtil.isCollection(subTypeName)
+                                    && !JavaClassValidateUtil.isMap(subTypeName)
+                                    && !JavaClassValidateUtil.isArray(subTypeName)) {
+                                fieldValue = DocUtil.handleJsonStr(fieldValue);
+                            }
                         }
                     }
                 }
