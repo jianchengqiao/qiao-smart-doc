@@ -105,6 +105,7 @@ smart-doc.json:
 | @author *Qiao*      | Controller <br> Method                            |  作者             |
 | @serverUrl *http://...*      | Controller <br> Method                            |  指定serverUrl，会覆盖config里的serverUrl，用于从zuul路由过来的情况，可填写来源服务的url |
 | @kafka     | Controller <br> Method                            |  标记 ***Controller*** 或 ***Method*** 标记为kafka文档，只生成 ***Topic*** 和 ***Response*** |
+| @header *Cookie* <br> @header *Cookie\|ppinf=...*   | Controller <br> Method                            |  需要请求头，加入 Cookie 或 Token 可用于调试 |
 | @apiNode *详细说明*         | Controller <br> Method                                       |  对本页文档或本方法的详细说明          |
 | @ignore <br> @ignore *editEstate* | Controller <br> Method <br> Filed | 忽略 ***Controller*** 、***Method*** 、***Filed*** ，不生成其文档。 <br> 作用在 ***Filed*** 时，若有分组，则只有与 ***Method*** 分组相同的字段才忽略。 |
 | @group *editEstate*       | Method                                            | 方法分组，配合 ***@ignore*** 使用，可忽略某个分组下的字段 |

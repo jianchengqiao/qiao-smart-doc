@@ -148,6 +148,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 docJavaMethods.add(DocJavaMethod.builder().setJavaMethod(method).setActualTypesMap(actualTypesMap));
             }
         }
+        List<DocletTag> classHeaders = cls.getTagsByName(HEADER);
         List<ApiMethodDoc> methodDocList = new ArrayList<>(methods.size());
         int methodOrder = 0;
         for (DocJavaMethod docJavaMethod : docJavaMethods) {
@@ -240,6 +241,12 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 } else {
                     allApiReqHeaders = apiReqHeaders;
                 }
+                List<DocletTag> methodHeaders = method.getTagsByName(HEADER);
+                if (EmptyUtil.notEmpty(methodHeaders)) {
+                    allApiReqHeaders.addAll(buildHeadersByTags(methodHeaders));
+                } else if (EmptyUtil.notEmpty(classHeaders)) {
+                    allApiReqHeaders.addAll(buildHeadersByTags(classHeaders));
+                }
                 //reduce create in template
                 apiMethodDoc.setHeaders(this.createDocRenderHeaders(allApiReqHeaders, apiConfig.isAdoc()));
                 apiMethodDoc.setRequestHeaders(allApiReqHeaders);
@@ -265,6 +272,23 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             methodDocList.add(apiMethodDoc);
         }
         return methodDocList;
+    }
+
+    private List<ApiReqHeader> buildHeadersByTags(List<DocletTag> headerTags) {
+        return headerTags.stream()
+                .filter(t -> EmptyUtil.notEmpty(t.getValue()))
+                .map(t -> {
+                    String name = t.getValue();
+                    String value = null;
+                    if (name.contains("|")) {
+                        String[] split = name.split("\\|");
+                        name = split[0];
+                        if (split.length > 1) {
+                            value = split[1];
+                        }
+                    }
+                    return new ApiReqHeader().setName(name).setValue(value).setType("string").setRequired(true).setDesc("需要请求头 " + name);
+                }).collect(Collectors.toList());
     }
 
     private ApiRequestExample buildReqJson(DocJavaMethod javaMethod, ApiMethodDoc apiMethodDoc, String methodType,

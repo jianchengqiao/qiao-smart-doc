@@ -70,6 +70,10 @@ public interface DocTags {
      * custom ignore tag
      */
     String SERVER_URL = "serverUrl";
+    /**
+     * custom ignore tag
+     */
+    String HEADER = "header";
 
     /**
      * custom @mock tag
