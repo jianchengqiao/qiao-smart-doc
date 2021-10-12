@@ -428,8 +428,10 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                                 .append(DocUtil.handleJsonStr(mockValue))
                                 .append("}");
                         requestExample.setJsonBody(JsonFormatUtil.formatJson(builder.toString())).setJson(true);
+                    } else if (JavaClassValidateUtil.isCollection(typeName) && globGicName.length > 0 && JavaClassValidateUtil.isPrimitive(globGicName[0])) {
+                        requestExample.setJsonBody(mockValue).setJson(true);
                     } else {
-                        String json = JsonBuildHelper.buildJson(typeName, gicTypeName, Boolean.FALSE, 0, new HashMap<>(), configBuilder,methodTags);
+                        String json = JsonBuildHelper.buildJson(typeName, gicTypeName, Boolean.FALSE, 0, new HashMap<>(), configBuilder, methodTags);
                         requestExample.setJsonBody(JsonFormatUtil.formatJson(json)).setJson(true);
                     }
                     paramAdded = true;
@@ -659,7 +661,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 paramList.add(param);
                 continue;
             }
-            String mockValue = createMockValue(paramsComments, paramName, typeName, simpleTypeName,randomMock);
+            String mockValue = createMockValue(paramsComments, paramName, fullTypeName, simpleTypeName,randomMock);
             JavaClass javaClass = builder.getJavaProjectBuilder().getClassByName(fullTypeName);
             List<JavaAnnotation> annotations = parameter.getAnnotations();
             List<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations);
@@ -898,7 +900,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
 
     private String createMockValue(Map<String, String> paramsComments, String paramName, String typeName, String simpleTypeName,boolean randomMock) {
         String mockValue = "";
-        if (JavaClassValidateUtil.isPrimitive(typeName)) {
+        if (JavaClassValidateUtil.isPrimitive(typeName) || JavaClassValidateUtil.isCollection(typeName)) {
             mockValue = paramsComments.get(paramName);
             if (Objects.nonNull(mockValue) && mockValue.contains("|")) {
                 mockValue = mockValue.substring(mockValue.lastIndexOf("|") + 1);
