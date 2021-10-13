@@ -28,10 +28,9 @@
                         <ul class="sectlevel2">
                             <%for(doc in api.list){%>
                             <li><%if(doc.deprecated){%>
-                                <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
-                                    class="line-through">${doc.desc}</span></a>
-                                <%}else{%><a
-                                    href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a>
+                                <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span class="line-through">${doc.desc}</span></a>
+                                <%}else{%>
+                                <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a>
                                 <%}%>
                             </li>
                             <%}%>

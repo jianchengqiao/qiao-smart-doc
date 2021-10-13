@@ -1402,6 +1402,28 @@ tbody tr th, tbody tr th p, tfoot tr th, tfoot tr th p {
     font-weight: bold
 }
 
+#accordion {
+}
+
+#accordion ul {
+    list-style: none;
+}
+
+#accordion li {
+    display: inline;
+}
+
+#accordion a {
+    text-decoration: none;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    display: list-item;
+}
+
+#accordion a:hover {
+    background-color: #eeeeee;
+}
+
+
 p.tableblock > code:only-child {
     background: 0;
     padding: 0
@@ -2202,7 +2224,10 @@ p {
     background-image: none;
     border: 1px solid transparent;
     border-radius: 4px;
-    outline-color: transparent
+    outline-color: transparent;
+}
+.send-button:hover{
+    background-color: #0c983c;
 }
 
 textarea {
