@@ -22,27 +22,24 @@
     <div id="toc" class="toc2">
         <div id="book-search-input"><input id="search" type="text" placeholder="Type to search"></div>
         <div id="toctitle"><span>API Reference</span></div>
-        <ul id="accordion" class="sectlevel1"><%for(api in apiDocList){%><%if(apiLP.first){%>
-            <li class="open"><a class="dd" href="#_${api.desc}">${api.order}.&nbsp;${api.desc}</a>
-                <ul class="sectlevel2" style="display: block"><%for(doc in api.list){%>
-                    <li><%if(doc.deprecated){%><a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
-                            class="line-through">${doc.desc}</span></a><%}else{%><a
-                            href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a><%}%>
+        <ul id="accordion" class="sectlevel1">
+            <%for(api in apiDocList){%>
+                    <li><a class="dd" href="#_${api.desc}">${api.order}.&nbsp;${api.desc}</a>
+                        <ul class="sectlevel2">
+                            <%for(doc in api.list){%>
+                            <li><%if(doc.deprecated){%>
+                                <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
+                                    class="line-through">${doc.desc}</span></a>
+                                <%}else{%><a
+                                    href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a>
+                                <%}%>
+                            </li>
+                            <%}%>
+                        </ul>
                     </li>
-                    <%}%>
-                </ul>
-            </li>
-            <%}else{%>
-            <li><a class="dd" href="#_${api.desc}">${api.order}.&nbsp;${api.desc}</a>
-                <ul class="sectlevel2"><%for(doc in api.list){%>
-                    <li><%if(doc.deprecated){%><a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
-                            class="line-through">${doc.desc}</span></a><%}else{%><a
-                            href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a><%}%>
-                    </li>
-                    <%}%>
-                </ul>
-            </li>
-            <%}%><%}%><%if(isNotEmpty(errorCodeList)){%>
+            <%}%>
+
+            <%if(isNotEmpty(errorCodeList)){%>
             <li><a href="#_error_code_list">${apiDocList.~size+1}.&nbsp;${errorListTitle}</a></li>
             <%}%><%if(isNotEmpty(dictList)){%>
             <li><a class="dd" href="#_dict_list">${dictListOrder}.&nbsp;${dictListTitle}</a>

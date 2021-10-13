@@ -66,7 +66,6 @@ $("button").on("click", function () {
     console.log("body-params=>" + JSON.stringify(bodyParamData))
     console.log("json-body=>" + body);
 
-    loading.style.visibility = 'visible'
     let finalUrl = "";
     let queryParamData = "";
     if (!isEmpty(page)) {
@@ -81,6 +80,8 @@ $("button").on("click", function () {
         return;
     }
     const ajaxOptions = {};
+
+    loading.style.visibility = 'visible'
 
     if ("multipart/form-data" == contentType) {
         finalUrl = castToGetUri(url, pathParamData);
