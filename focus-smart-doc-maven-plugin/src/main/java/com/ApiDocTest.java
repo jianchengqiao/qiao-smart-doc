@@ -22,13 +22,14 @@ public class ApiDocTest {
      */
     public static void testBuilderControllersApi() {
         ApiConfig config = new ApiConfig();
-//        config.setCoverOld(true);
-//        config.setCreateDebugPage(true);
-//        config.setAllInOneDocFileName("index.html");
-//        config.setAllInOne(true);
+        config.setCoverOld(true);
+        config.setCreateDebugPage(true);
+        config.setAllInOneDocFileName("index.html");
+        config.setAllInOne(true);
+        config.setServerUrl("http://localhost:8086");
         config.setOutPath("/Users/Qiao/Desktop/doc");
         //不指定SourcePaths默认加载代码为项目src/main/java下的
-        config.setPackageFilters("cn.focus.platform.controller.tooll");
+        config.setPackageFilters("cn.focus.platform.controller.tool");
         config.setSourceCodePaths(
                 SourceCodePath.builder().setDesc("智慧案场")
                         .setPath("/Users/Qiao/Documents/IdeaProjects/wx-platform/code/src/main/java")

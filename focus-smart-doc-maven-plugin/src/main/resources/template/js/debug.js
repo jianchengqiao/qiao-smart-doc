@@ -58,11 +58,15 @@ $("button").on("click", function () {
     const page = $("#" + id + "-url").data("page");
     const method = $("#" + id + "-method").data("method");
     const contentType = $("#" + id + "-content-type").data("content-type");
+    const loading = document.getElementById(id + "-loading")
+
     console.log("request-headers=>" + JSON.stringify(headersData))
     console.log("path-params=>" + JSON.stringify(pathParamData))
 
     console.log("body-params=>" + JSON.stringify(bodyParamData))
     console.log("json-body=>" + body);
+
+    loading.style.visibility = 'visible'
     let finalUrl = "";
     let queryParamData = "";
     if (!isEmpty(page)) {
@@ -106,24 +110,27 @@ $("button").on("click", function () {
     $.ajax(ajaxOptions).done(function (result, textStatus, jqXHR) {
         const totalTime = new Date().getTime() - ajaxTime;
         $this.css("background", "#5cb85c");
-        $("#" + id + "-resp-status").html("&nbsp;Status:&nbsp;" + jqXHR.status + "&nbsp;&nbsp;" + jqXHR.statusText + "&nbsp;&nbsp;&nbsp;&nbsp;Time:&nbsp;" + totalTime + "&nbsp;ms");
-        const highlightedCode = hljs.highlight('json', JSON.stringify(result, null, 4)).value;
-        $responseEle.html(highlightedCode);
+        $("#" + id + "-resp-status").html("&nbsp;Status:&nbsp;" + jqXHR.status + "&nbsp;&nbsp;" + jqXHR.statusText + "&nbsp;&nbsp;&nbsp;&nbsp;Time:&nbsp;" + totalTime + "&nbsp;ms&nbsp;&nbsp;&nbsp;&nbsp;"+ new Date().toLocaleString());
+        if (result.toString().startsWith("{")||result.toString().startsWith("[")) {
+            const highlightedCode = hljs.highlight('json', JSON.stringify(result, null, 4)).value;
+            $responseEle.html(highlightedCode);
+        }else {
+            $responseEle.html(result.toString());
+        }
     }).fail(function (jqXHR) {
         const totalTime = new Date().getTime() - ajaxTime;
         $this.css("background", "#D44B47");
         if (jqXHR.status === 0 && jqXHR.readyState === 0) {
-            $("#" + id + "-resp-status").html("Connection refused, please check the server.");
+            $("#" + id + "-resp-status").html("Connection refused, please check the server.&nbsp;&nbsp;&nbsp;&nbsp;"+ new Date().toLocaleString());
         } else {
-            $("#" + id + "-resp-status").html("&nbsp;Status:&nbsp;" + jqXHR.status + "&nbsp;&nbsp;" + jqXHR.statusText + "&nbsp;&nbsp;&nbsp;&nbsp;Time:&nbsp;" + totalTime + "&nbsp;ms");
+            $("#" + id + "-resp-status").html("&nbsp;Status:&nbsp;" + jqXHR.status + "&nbsp;&nbsp;" + jqXHR.statusText + "&nbsp;&nbsp;&nbsp;&nbsp;Time:&nbsp;" + totalTime + "&nbsp;ms&nbsp;&nbsp;&nbsp;&nbsp;"+ new Date().toLocaleString());
         }
         if (undefined !== jqXHR.responseJSON) {
             const highlightedCode = hljs.highlight('json', JSON.stringify(jqXHR.responseJSON, null, 4)).value;
             $responseEle.html(highlightedCode);
         }
     }).always(function () {
-
-
+        loading.style.visibility = 'hidden'
     });
     const curlCmd = toCurl(ajaxOptions);
     const highlightedCode = hljs.highlight('bash', curlCmd).value;

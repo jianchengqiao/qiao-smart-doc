@@ -29,9 +29,13 @@ import com.power.doc.template.IDocBuildTemplate;
 import com.power.doc.template.SpringBootDocBuildTemplate;
 import com.power.doc.utils.BeetlTemplateUtil;
 import com.thoughtworks.qdox.JavaProjectBuilder;
+import org.apache.commons.io.*;
 import org.apache.commons.lang3.StringUtils;
 import org.beetl.core.Template;
+import sun.nio.ch.*;
 
+import java.io.*;
+import java.net.*;
 import java.util.List;
 
 import static com.power.doc.constants.DocGlobalConstants.*;
@@ -76,6 +80,14 @@ public class HtmlApiDocBuilder {
         List<ApiDoc> apiDocList = docBuildTemplate.getApiData(configBuilder);
         Template indexCssTemplate = BeetlTemplateUtil.getByName(ALL_IN_ONE_CSS);
         FileUtil.nioWriteFile(indexCssTemplate.render(), config.getOutPath() + FILE_SEPARATOR + ALL_IN_ONE_CSS);
+        URL img = Thread.currentThread().getContextClassLoader().getResource("img/loading.gif");
+        File target = new File(config.getOutPath() + FILE_SEPARATOR + "loading.gif");
+        try (InputStream in = img.openStream();
+             FileOutputStream out = new FileOutputStream(target)) {
+            IOUtils.copy(in, out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (config.isAllInOne()) {
             if (config.isCreateDebugPage()) {
                 INDEX_HTML = DEBUG_PAGE_ALL_TPL;

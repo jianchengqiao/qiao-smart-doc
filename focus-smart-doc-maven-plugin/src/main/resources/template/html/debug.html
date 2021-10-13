@@ -290,7 +290,9 @@
                 <div class="paragraph">
                     <p><strong>
                         <button class="send-button" data-id="${doc.methodId}">Send Request</button>
-                    </strong><span id="${doc.methodId}-resp-status"></span></p>
+                    </strong>
+                        <img id="${doc.methodId}-loading" src="loading.gif" style="width: 2.5em; height: 2.5em; visibility: hidden">
+                        <span id="${doc.methodId}-resp-status"></span></p>
                 </div>
                 <%if(isNotEmpty(doc.responseUsage)&&isResponseExample){%>
                 <div class="paragraph"><p><strong>Response-example:</strong></p></div>

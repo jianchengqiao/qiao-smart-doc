@@ -418,7 +418,11 @@ public class JsonBuildHelper {
             data0.deleteCharAt(data0.lastIndexOf(","));
         }
         data0.append("}");
-        return data0.toString();
+        String toString = data0.toString();
+        if (toString.equals("{}")){
+            return "any object";
+        }
+        return toString;
     }
 
 
