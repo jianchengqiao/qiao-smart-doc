@@ -370,14 +370,15 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             if (JavaClassValidateUtil.isCollection(typeName)) {
                 apiMethodDoc.setListParam(true);
             }
+            List<JavaAnnotation> annotations = parameter.getAnnotations();
             JavaClass javaClass = configBuilder.getJavaProjectBuilder().getClassByName(typeName);
             String[] globGicName = DocClassUtil.getSimpleGicName(gicTypeName);
             String comment = this.paramCommentResolve(paramsComments.get(paramName));
-            String mockValue = createMockValue(paramsComments, paramName, typeName, simpleTypeName,randomMock);
+            boolean isBody = annotations.stream().anyMatch(a -> SpringMvcAnnotations.REQUEST_BODY.equals(a.getType().getValue()));
+            String mockValue = createMockValue(paramsComments, paramName, typeName, simpleTypeName, randomMock, isBody);
             if (requestFieldToUnderline) {
                 paramName = StringUtil.camelToUnderline(paramName);
             }
-            List<JavaAnnotation> annotations = parameter.getAnnotations();
             boolean paramAdded = false;
             for (JavaAnnotation annotation : annotations) {
                 String annotationName = annotation.getType().getValue();
@@ -429,6 +430,8 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                                 .append("}");
                         requestExample.setJsonBody(JsonFormatUtil.formatJson(builder.toString())).setJson(true);
                     } else if (JavaClassValidateUtil.isCollection(typeName) && globGicName.length > 0 && JavaClassValidateUtil.isPrimitive(globGicName[0])) {
+                        requestExample.setJsonBody(mockValue).setJson(true);
+                    } else if (EmptyUtil.notEmpty(mockValue)) {
                         requestExample.setJsonBody(mockValue).setJson(true);
                     } else {
                         String json = JsonBuildHelper.buildJson(typeName, gicTypeName, Boolean.FALSE, 0, new HashMap<>(), configBuilder, methodTags);
@@ -661,9 +664,10 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 paramList.add(param);
                 continue;
             }
-            String mockValue = createMockValue(paramsComments, paramName, fullTypeName, simpleTypeName,randomMock);
-            JavaClass javaClass = builder.getJavaProjectBuilder().getClassByName(fullTypeName);
             List<JavaAnnotation> annotations = parameter.getAnnotations();
+            boolean isBody = annotations.stream().anyMatch(a -> SpringMvcAnnotations.REQUEST_BODY.equals(a.getType().getValue()));
+            String mockValue = createMockValue(paramsComments, paramName, fullTypeName, simpleTypeName, randomMock, isBody);
+            JavaClass javaClass = builder.getJavaProjectBuilder().getClassByName(fullTypeName);
             List<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations);
             String strRequired = "false";
             boolean isPathVariable = false;
@@ -898,9 +902,9 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
         return rewriteClassName;
     }
 
-    private String createMockValue(Map<String, String> paramsComments, String paramName, String typeName, String simpleTypeName,boolean randomMock) {
+    private String createMockValue(Map<String, String> paramsComments, String paramName, String typeName, String simpleTypeName, boolean randomMock, boolean isBody) {
         String mockValue = "";
-        if (JavaClassValidateUtil.isPrimitive(typeName) || JavaClassValidateUtil.isCollection(typeName)) {
+        if (JavaClassValidateUtil.isPrimitive(typeName) || JavaClassValidateUtil.isCollection(typeName) || isBody) {
             mockValue = paramsComments.get(paramName);
             if (Objects.nonNull(mockValue) && mockValue.contains("|")) {
                 mockValue = mockValue.substring(mockValue.lastIndexOf("|") + 1);
