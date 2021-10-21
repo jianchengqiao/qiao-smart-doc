@@ -29,10 +29,10 @@ public class ApiDocTest {
         config.setServerUrl("http://localhost:8086");
         config.setOutPath("/Users/Qiao/Desktop/doc");
         //不指定SourcePaths默认加载代码为项目src/main/java下的
-        config.setPackageFilters("cn.focus.platform.controller.tooll");
+        config.setPackageFilters("cn.focus.sc.dist.controller.applet");
         config.setSourceCodePaths(
                 SourceCodePath.builder().setDesc("智慧案场")
-                        .setPath("/Users/Qiao/Documents/IdeaProjects/wx-platform/code/src/main/java")
+                        .setPath("/Users/Qiao/Documents/IdeaProjects/sc-dist/code/src/main/java")
         );
         //设置请求头，如果没有请求头，可以不用设置
 //        config.setRequestHeaders(

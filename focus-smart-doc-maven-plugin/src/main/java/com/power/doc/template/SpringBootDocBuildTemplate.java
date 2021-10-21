@@ -906,7 +906,10 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
         String mockValue = "";
         if (JavaClassValidateUtil.isPrimitive(typeName) || JavaClassValidateUtil.isCollection(typeName) || isBody) {
             mockValue = paramsComments.get(paramName);
-            if (Objects.nonNull(mockValue) && mockValue.contains("|")) {
+            if (EmptyUtil.isEmpty(mockValue)){
+                return mockValue;
+            }
+            if (mockValue.contains("|")) {
                 mockValue = mockValue.substring(mockValue.lastIndexOf("|") + 1);
             } else {
                 mockValue = "";
