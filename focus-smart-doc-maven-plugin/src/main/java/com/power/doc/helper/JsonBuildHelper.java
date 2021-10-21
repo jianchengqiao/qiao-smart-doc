@@ -204,6 +204,10 @@ public class JsonBuildHelper {
                 if (field.isTransient() && skipTransientField) {
                     continue;
                 }
+                String comment = docField.getComment();
+                if (EmptyUtil.isEmpty(comment)) {
+                    continue;
+                }
                 if ((responseFieldToUnderline && isResp) || (requestFieldToUnderline && !isResp)) {
                     fieldName = StringUtil.camelToUnderline(fieldName);
                 }
@@ -255,7 +259,6 @@ public class JsonBuildHelper {
                         fieldValue = DocUtil.handleJsonStr(fieldValue);
                     }
                 }else {
-                    String comment = docField.getComment();
                     if (comment !=null&& comment.contains("|")){
                         String[] split = comment.split("\\|");
                         if (split.length>1){

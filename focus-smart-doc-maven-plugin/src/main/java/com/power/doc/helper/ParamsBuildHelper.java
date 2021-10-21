@@ -219,6 +219,9 @@ public class ParamsBuildHelper {
                 if (StringUtil.isNotEmpty(comment)) {
                     comment = DocUtil.replaceNewLineToHtmlBr(comment);
                 }
+                if (EmptyUtil.isEmpty(comment)){
+                    continue ;
+                }
                 // file
                 Object value = null;
                 if (comment != null)

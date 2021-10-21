@@ -666,6 +666,10 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             }
             List<JavaAnnotation> annotations = parameter.getAnnotations();
             boolean isBody = annotations.stream().anyMatch(a -> SpringMvcAnnotations.REQUEST_BODY.equals(a.getType().getValue()));
+            if (!isBody && NO_COMMENTS_FOUND.equals(comment)) {
+                continue;
+            }
+
             String mockValue = createMockValue(paramsComments, paramName, fullTypeName, simpleTypeName, randomMock, isBody);
             JavaClass javaClass = builder.getJavaProjectBuilder().getClassByName(fullTypeName);
             List<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations);
