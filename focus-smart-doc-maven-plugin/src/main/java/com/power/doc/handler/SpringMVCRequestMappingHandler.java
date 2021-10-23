@@ -30,8 +30,7 @@ import com.power.doc.constants.DocGlobalConstants;
 import com.power.doc.constants.Methods;
 import com.power.doc.constants.SpringMvcAnnotations;
 import com.power.doc.model.request.RequestMapping;
-import com.power.doc.utils.DocUrlUtil;
-import com.power.doc.utils.DocUtil;
+import com.power.doc.utils.*;
 import com.thoughtworks.qdox.model.*;
 
 import java.util.Arrays;
@@ -103,7 +102,8 @@ public class SpringMVCRequestMappingHandler {
             deprecated = true;
         }
         if (Objects.nonNull(shortUrl)) {
-            if (Objects.nonNull(method.getTagByName(IGNORE))) {
+            DocletTag ignoreTag = method.getTagByName(IGNORE);
+            if (Objects.nonNull(ignoreTag) && EmptyUtil.isTrimEmpty(ignoreTag.getValue())) {
                 return null;
             }
             shortUrl = StringUtil.removeQuotes(shortUrl);

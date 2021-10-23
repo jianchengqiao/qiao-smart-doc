@@ -88,6 +88,7 @@ public class FormDataBuildHelper {
         }
         int n = 0;
         String methodGroupValue = methodTags == null ? null : methodTags.stream().filter(t -> DocTags.GROUP.equals(t.getName())).findAny().map(DocletTag::getValue).orElse(null);
+        String methodIgnoreGroupValue = methodTags == null ? null : methodTags.stream().filter(t -> DocTags.IGNORE.equals(t.getName())).findAny().map(DocletTag::getValue).orElse(null);
         out:
         for (DocJavaField docField : fields) {
             JavaField field = docField.getJavaField();
@@ -106,10 +107,14 @@ public class FormDataBuildHelper {
                 fieldName = StringUtil.camelToUnderline(fieldName);
             }
             Map<String, String> tagsMap = DocUtil.getFieldTagsValue(field, docField);
+            String fieldGroup = tagsMap.get(DocTags.GROUP);
             String fieldIgnore = tagsMap.get(DocTags.IGNORE);
-            if (tagsMap.containsKey(DocTags.IGNORE)) {
-                if (StringUtil.isEmpty(fieldIgnore) || (methodGroupValue != null && !methodGroupValue.trim().isEmpty() && fieldIgnore.contains(methodGroupValue))) {
-                    continue out;
+            if (EmptyUtil.notEmpty(methodGroupValue)) {
+                if (EmptyUtil.isEmpty(fieldGroup) || !fieldGroup.contains("alwaysShow") && !fieldGroup.contains(methodGroupValue))
+                    continue;
+            } else if (tagsMap.containsKey(DocTags.IGNORE)) {
+                if (StringUtil.isEmpty(fieldIgnore) || (methodIgnoreGroupValue != null && !methodIgnoreGroupValue.trim().isEmpty() && fieldIgnore.contains(methodIgnoreGroupValue))) {
+                    continue;
                 }
             }
             String typeSimpleName = field.getType().getSimpleName();

@@ -156,7 +156,8 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             if (method.getComment() == null || method.getComment().trim().isEmpty()) {
                 continue;
             }
-            if (method.isPrivate() || Objects.nonNull(method.getTagByName(IGNORE))) {
+            DocletTag ignoreTag = method.getTagByName(IGNORE);
+            if (method.isPrivate() || (ignoreTag != null && EmptyUtil.isEmpty(ignoreTag.getValue()))) {
                 continue;
             }
             serverUrlTag = method.getTagByName(SERVER_URL);
