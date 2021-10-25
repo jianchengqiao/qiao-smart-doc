@@ -107,8 +107,9 @@ smart-doc.json:
 | @kafka     | Controller <br> Method                            |  标记 ***Controller*** 或 ***Method*** 标记为kafka文档，只生成 ***Topic*** 和 ***Response*** |
 | @header *Cookie* <br> @header *Cookie\|ppinf=...*   | Controller <br> Method                            |  需要请求头，加入 Cookie 或 Token 可用于调试 |
 | @apiNode *详细说明*         | Controller <br> Method                                       |  对本页文档或本方法的详细说明          |
-| @ignore <br> @ignore *editEstate* | Controller <br> Method <br> Filed | 忽略 ***Controller*** 、***Method*** 、***Filed*** ，不生成其文档。 <br> 作用在 ***Filed*** 时，若有分组，则只有与 ***Method*** 分组相同的字段才忽略。 |
-| @group *editEstate*       | Method                                            | 方法分组，配合 ***@ignore*** 使用，可忽略某个分组下的字段 |
+| @ignore | Controller <br> Method <br> Filed | 直接忽略 ***Controller*** 、***Method*** 、***Filed*** ，不生成其文档。  |
+| @ignore *editEstate* | Method <br> Filed |  ***Method*** 不会被忽略，与 ***Method*** ignore相同的 ***Filed*** 会被忽略。 |
+| @group *editEstate*       | Method     <br> Filed            | 与 ***Method*** group相同的 ***Filed*** 会被保留，其他的忽略，优先级高于 **@ignore** |
 | @ignoreParams *groupId,estateId*         | Method                                       |  忽略方法的一些参数，不生成文档          |
 | @param **estateId**  *楼盘id，所有楼盘接口必填\|10086*         |   Method                                       |  参数说明，其中 ***\|*** 后面为mock请求响应示例的值，不写则根据配置随机mock或null          |
 | @page */tool/trial.html*         |   Method                                      |  标记该方法为一个页面，点击 ***Send Request*** 会打开这个页面          |
