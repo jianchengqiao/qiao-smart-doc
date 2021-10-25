@@ -275,7 +275,7 @@ public class DocUtil {
             Map.Entry<String, String> next = iteratorMap.next();
             int start;
             String pattern = "{" + next.getKey() + "}";
-            String value = next.getValue().toString();
+            String value = next.getValue();
             // values.remove(next.getKey());
             // Replace every occurence of {key} with value
             while ((start = builder.indexOf(pattern)) != -1) {
