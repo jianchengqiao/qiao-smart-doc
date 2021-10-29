@@ -6,7 +6,7 @@
 
     <groupId>cn.focus</groupId>
     <artifactId>focus-smart-doc-maven-plugin</artifactId>
-    <version>5.0</version>
+    <version>6.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>focus-smart-doc-maven-plugin</name>

@@ -83,6 +83,8 @@ public interface DocGlobalConstants {
 
     String DEBUG_PAGE_ALL_TPL = "debug-all.html";
 
+    String DEBUG_PAGE_ALL_LIVE_TPL = "debug-all-live.html";
+
     String DEBUG_PAGE_SINGLE_TPL = "html/debug.html";
 
     String SINGLE_INDEX_HTML_TPL = "html/index.html";

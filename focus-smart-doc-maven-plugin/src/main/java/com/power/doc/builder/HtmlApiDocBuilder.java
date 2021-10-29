@@ -22,21 +22,15 @@
  */
 package com.power.doc.builder;
 
-import com.power.common.util.FileUtil;
-import com.power.doc.model.ApiConfig;
-import com.power.doc.model.ApiDoc;
-import com.power.doc.template.IDocBuildTemplate;
-import com.power.doc.template.SpringBootDocBuildTemplate;
-import com.power.doc.utils.BeetlTemplateUtil;
-import com.thoughtworks.qdox.JavaProjectBuilder;
-import org.apache.commons.io.*;
-import org.apache.commons.lang3.StringUtils;
-import org.beetl.core.Template;
-import sun.nio.ch.*;
+import com.power.common.util.*;
+import com.power.doc.model.*;
+import com.power.doc.template.*;
+import com.power.doc.utils.*;
+import com.thoughtworks.qdox.*;
+import org.apache.commons.lang3.*;
+import org.beetl.core.*;
 
-import java.io.*;
-import java.net.*;
-import java.util.List;
+import java.util.*;
 
 import static com.power.doc.constants.DocGlobalConstants.*;
 
@@ -80,14 +74,6 @@ public class HtmlApiDocBuilder {
         List<ApiDoc> apiDocList = docBuildTemplate.getApiData(configBuilder);
         Template indexCssTemplate = BeetlTemplateUtil.getByName(ALL_IN_ONE_CSS);
         FileUtil.nioWriteFile(indexCssTemplate.render(), config.getOutPath() + FILE_SEPARATOR + ALL_IN_ONE_CSS);
-        URL img = Thread.currentThread().getContextClassLoader().getResource("img/loading.gif");
-        File target = new File(config.getOutPath() + FILE_SEPARATOR + "loading.gif");
-        try (InputStream in = img.openStream();
-             FileOutputStream out = new FileOutputStream(target)) {
-            IOUtils.copy(in, out);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         if (config.isAllInOne()) {
             if (config.isCreateDebugPage()) {
                 INDEX_HTML = DEBUG_PAGE_ALL_TPL;
@@ -123,6 +109,31 @@ public class HtmlApiDocBuilder {
         }
 
     }
+
+    public static String[] buildApiDocFiles(ApiConfig config) {
+        String[] files = new String[4];
+        JavaProjectBuilder javaProjectBuilder = new JavaProjectBuilder();
+        DocBuilderTemplate builderTemplate = new DocBuilderTemplate();
+        builderTemplate.checkAndInit(config);
+        config.setParamsDataToTree(false);
+        ProjectDocConfigBuilder configBuilder = new ProjectDocConfigBuilder(config, javaProjectBuilder);
+        IDocBuildTemplate docBuildTemplate = new SpringBootDocBuildTemplate();
+        List<ApiDoc> apiDocList = docBuildTemplate.getApiData(configBuilder);
+        String css = BeetlTemplateUtil.getByName(ALL_IN_ONE_CSS).render();
+        INDEX_HTML = DEBUG_PAGE_ALL_LIVE_TPL;
+        if (StringUtils.isNotEmpty(config.getAllInOneDocFileName())) {
+            INDEX_HTML = config.getAllInOneDocFileName();
+        }
+        String index = builderTemplate.buildAllInOneFile(apiDocList, config, javaProjectBuilder, DEBUG_PAGE_ALL_LIVE_TPL);
+        String debugJs = BeetlTemplateUtil.getByName(DEBUG_JS_TPL).render();
+        String searchJs = builderTemplate.buildSearchJsFile(config, javaProjectBuilder, apiDocList, SEARCH_ALL_JS_TPL);
+        files[0] = index;
+        files[1] = css;
+        files[2] = debugJs;
+        files[3] = searchJs;
+        return files;
+    }
+
 
     /**
      * build ever controller api

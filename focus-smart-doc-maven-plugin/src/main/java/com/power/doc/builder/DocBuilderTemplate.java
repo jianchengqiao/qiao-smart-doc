@@ -103,6 +103,38 @@ public class DocBuilderTemplate extends BaseDocBuilderTemplate {
         buildDoc(apiDocList, config, javaProjectBuilder, template, outPutFileName, null, null);
     }
 
+    public String buildAllInOneFile(List<ApiDoc> apiDocList, ApiConfig config, JavaProjectBuilder javaProjectBuilder, String template) {
+        ApiDoc apiDoc = null;
+        String index = null;
+        String outPath = config.getOutPath();
+        String strTime = DateTimeUtil.long2Str(now, DateTimeUtil.DATE_FORMAT_SECOND);
+        FileUtil.mkdirs(outPath);
+        List<ApiErrorCode> errorCodeList = errorCodeDictToList(config);
+        Template tpl = BeetlTemplateUtil.getByName(template);
+        String style = config.getStyle();
+        tpl.binding(TemplateVariable.STYLE.getVariable(), style);
+        tpl.binding(TemplateVariable.BACKGROUND.getVariable(), HighlightStyle.getBackgroundColor(style));
+        tpl.binding(TemplateVariable.API_DOC_LIST.getVariable(), apiDocList);
+        tpl.binding(TemplateVariable.ERROR_CODE_LIST.getVariable(), errorCodeList);
+        tpl.binding(TemplateVariable.VERSION_LIST.getVariable(), config.getRevisionLogs());
+        tpl.binding(TemplateVariable.DESCRIPTIONS.getVariable(), config.getDescriptions());
+        tpl.binding(TemplateVariable.VERSION.getVariable(), now);
+        tpl.binding(TemplateVariable.INDEX_ALIAS.getVariable(), index);
+        tpl.binding(TemplateVariable.CREATE_TIME.getVariable(), strTime);
+        tpl.binding(TemplateVariable.PROJECT_NAME.getVariable(), config.getProjectName());
+        tpl.binding(TemplateVariable.REQUEST_EXAMPLE.getVariable(), config.isRequestExample());
+        tpl.binding(TemplateVariable.RESPONSE_EXAMPLE.getVariable(), config.isResponseExample());
+        if (CollectionUtil.isEmpty(errorCodeList)) {
+            tpl.binding(TemplateVariable.DICT_ORDER.getVariable(), apiDocList.size() + 1);
+        } else {
+            tpl.binding(TemplateVariable.DICT_ORDER.getVariable(), apiDocList.size() + 2);
+        }
+        setDirectoryLanguageVariable(config, tpl);
+        List<ApiDocDict> apiDocDictList = buildDictionary(config, javaProjectBuilder);
+        tpl.binding(TemplateVariable.DICT_LIST.getVariable(), apiDocDictList);
+        return tpl.render();
+    }
+
     /**
      * Merge all api doc into one document
      *
@@ -188,6 +220,47 @@ public class DocBuilderTemplate extends BaseDocBuilderTemplate {
         apiDocs.add(apiDoc1);
         tpl.binding(TemplateVariable.API_DOC_LIST.getVariable(), apiDocs);
         FileUtil.nioWriteFile(tpl.render(), config.getOutPath() + FILE_SEPARATOR + SEARCH_JS_OUT);
+    }
+
+
+    public String buildSearchJsFile(ApiConfig config, JavaProjectBuilder javaProjectBuilder, List<ApiDoc> apiDocList, String template) {
+        List<ApiErrorCode> errorCodeList = errorCodeDictToList(config);
+        Template tpl = BeetlTemplateUtil.getByName(template);
+        // directory tree
+        List<ApiDoc> apiDocs = new ArrayList<>();
+        for (ApiDoc apiDoc1 : apiDocList) {
+            apiDoc1.setOrder(apiDocs.size() + 1);
+            apiDocs.add(apiDoc1);
+        }
+        Map<String, String> titleMap = setDirectoryLanguageVariable(config, tpl);
+        // set error code
+        if (CollectionUtil.isNotEmpty(errorCodeList)) {
+            ApiDoc apiDoc1 = new ApiDoc();
+            apiDoc1.setOrder(apiDocs.size() + 1);
+            apiDoc1.setDesc(titleMap.get(TemplateVariable.ERROR_LIST_TITLE.getVariable()));
+            apiDoc1.setList(new ArrayList<>(0));
+            apiDoc1.setLink("error_code_list");
+            apiDoc1.setAlias("error");
+            apiDocs.add(apiDoc1);
+        }
+        // set dict list
+        List<ApiDocDict> apiDocDictList = buildDictionary(config, javaProjectBuilder);
+        ApiDoc apiDoc1 = new ApiDoc();
+        apiDoc1.setOrder(apiDocs.size() + 1);
+        apiDoc1.setLink("dict_list");
+        apiDoc1.setAlias("dict");
+        apiDoc1.setDesc(titleMap.get(TemplateVariable.DICT_LIST_TITLE.getVariable()));
+        List<ApiMethodDoc> methodDocs = new ArrayList<>();
+        for (ApiDocDict apiDocDict : apiDocDictList) {
+            ApiMethodDoc methodDoc = new ApiMethodDoc();
+            methodDoc.setOrder(apiDocDict.getOrder());
+            methodDoc.setDesc(apiDocDict.getTitle());
+            methodDocs.add(methodDoc);
+        }
+        apiDoc1.setList(methodDocs);
+        apiDocs.add(apiDoc1);
+        tpl.binding(TemplateVariable.API_DOC_LIST.getVariable(), apiDocs);
+        return tpl.render();
     }
 
 

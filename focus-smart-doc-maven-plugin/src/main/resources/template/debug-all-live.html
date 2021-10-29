@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="smart-doc">
     <%if(isNotEmpty(projectName)){%><title>${projectName}</title><%}else{%><title>API Reference</title><%}%>
-    <link rel="stylesheet" href="AllInOne.css?v=${version}"/>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/${style}.min.css">
     <style>.literalblock pre, .listingblock pre:not(.highlight), .listingblock pre[class="highlight"], .listingblock pre[class^="highlight "], .listingblock pre.CodeRay, .listingblock pre.prettyprint {
         background: ${background}
@@ -16,6 +15,9 @@
     }</style>
     <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <style>
+        MY_CUSTOM_CSS
+    </style>
 </head>
 <body class="book toc2 toc-left">
 <div id="header"><%if(isNotEmpty(projectName)){%><h1><strong>${projectName}</strong></h1><%}%>
@@ -24,33 +26,35 @@
         <div id="toctitle"><span>API Reference</span></div>
         <ul id="accordion" class="sectlevel1">
             <%for(api in apiDocList){%>
-                <%if(apiLP.first){%>
-                    <li><a class="dd" href="#_${api.desc}">${api.order}.&nbsp;${api.desc}</a>
-                        <ul class="sectlevel2" style="display: block">
-                            <%for(doc in api.list){%>
-                            <li><%if(doc.deprecated){%>
-                                <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span class="line-through">${doc.desc}</span></a>
-                                <%}else{%>
-                                <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a>
-                                <%}%>
-                            </li>
-                            <%}%>
-                        </ul>
+            <%if(apiLP.first){%>
+            <li><a class="dd" href="#_${api.desc}">${api.order}.&nbsp;${api.desc}</a>
+                <ul class="sectlevel2" style="display: block">
+                    <%for(doc in api.list){%>
+                    <li><%if(doc.deprecated){%>
+                        <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
+                                class="line-through">${doc.desc}</span></a>
+                        <%}else{%>
+                        <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a>
+                        <%}%>
                     </li>
-                <%}else{%>
-                    <li><a class="dd" href="#_${api.desc}">${api.order}.&nbsp;${api.desc}</a>
-                        <ul class="sectlevel2">
-                            <%for(doc in api.list){%>
-                            <li><%if(doc.deprecated){%>
-                                <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span class="line-through">${doc.desc}</span></a>
-                                <%}else{%>
-                                <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a>
-                                <%}%>
-                            </li>
-                            <%}%>
-                        </ul>
+                    <%}%>
+                </ul>
+            </li>
+            <%}else{%>
+            <li><a class="dd" href="#_${api.desc}">${api.order}.&nbsp;${api.desc}</a>
+                <ul class="sectlevel2">
+                    <%for(doc in api.list){%>
+                    <li><%if(doc.deprecated){%>
+                        <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
+                                class="line-through">${doc.desc}</span></a>
+                        <%}else{%>
+                        <a href="#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${doc.desc}</a>
+                        <%}%>
                     </li>
-                <%}%>
+                    <%}%>
+                </ul>
+            </li>
+            <%}%>
             <%}%>
 
             <%if(isNotEmpty(errorCodeList)){%>
@@ -126,14 +130,14 @@
         <div class="sectionbody"><%for(doc in api.list){%>
             <div class="sect2" id="${doc.methodId}">
                 <h4 id="_${api.order}_${doc.order}_${doc.desc}"><a class="anchor"
-                                                                                                       href="#_${api.order}_${doc.order}_${doc.desc}"></a>
-                <%if(doc.deprecated){%><a
-                    class="link" href="#_${api.order}_${doc.order}_${doc.desc}"><strong>${api.order}.${doc.order}.&nbsp;<span
-                    class="line-through">${doc.desc}</span></strong></a>
-                <%}
-                else{%><a class="link" href="#_${api.order}_${doc.order}_${doc.desc}"><strong>${api.order}.${doc.order}.&nbsp;${doc.desc}</strong></a>
-                <%}%>
-            </h4>
+                                                                   href="#_${api.order}_${doc.order}_${doc.desc}"></a>
+                    <%if(doc.deprecated){%><a
+                            class="link" href="#_${api.order}_${doc.order}_${doc.desc}"><strong>${api.order}.${doc.order}.&nbsp;<span
+                            class="line-through">${doc.desc}</span></strong></a>
+                    <%}
+                    else{%><a class="link" href="#_${api.order}_${doc.order}_${doc.desc}"><strong>${api.order}.${doc.order}.&nbsp;${doc.desc}</strong></a>
+                    <%}%>
+                </h4>
                 <%if(isNotEmpty(doc.detail)&&isNotEqual(doc.detail,doc.desc)){%>
                 <div class="paragraph"><p><strong>Description:</strong>&nbsp;${doc.detail}</p></div>
                 <%}%>
@@ -142,7 +146,8 @@
                      data-page="${doc.page}"><p><strong>Topic:</strong>&nbsp;${doc.topic}</p></div>
                 <%}else{%>
                 <div class="paragraph" id="${doc.methodId}-url" data-url="${doc.url}" data-download="${doc.download}"
-                     data-page="${doc.page}"><p><strong>Url:</strong>&nbsp;${doc.type}&nbsp;<a href="${doc.url}">${doc.url}</a></p></div>
+                     data-page="${doc.page}"><p><strong>Url:</strong>&nbsp;${doc.type}&nbsp;<a href="${doc.url}">${doc.url}</a>
+                </p></div>
                 <div class="paragraph" id="${doc.methodId}-method" data-method="${doc.type}"></div>
                 <%}%>
                 <%if(isNotEmpty(doc.author)){%>
@@ -168,8 +173,8 @@
                         <th class="tableblock halign-left valign-top">
                             <div class="checkbox">
                                 <input type="checkbox" class="check-all"
-                                                         id="${doc.methodId}-header-checkbox"
-                                                         name="${doc.methodId}-header-checkbox" checked="checked"><label
+                                       id="${doc.methodId}-header-checkbox"
+                                       name="${doc.methodId}-header-checkbox" checked="checked"><label
                                     for="${doc.methodId}-header-checkbox"></label></div>
                         </th>
                         <th class="tableblock halign-left valign-top">Header</th>
@@ -188,7 +193,8 @@
                         </td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${header.name}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock"><input name="${header.name}"
-                                                                                                   type="text" placeholder="点击输入参数"
+                                                                                                   type="text"
+                                                                                                   placeholder="点击输入参数"
                                                                                                    value="${header.value}"/>
                         </td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${header.type}</p></td>
@@ -233,7 +239,8 @@
                         </td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.field}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock"><input name="${param.field}"
-                                                                                                   type="text" placeholder="点击输入参数"
+                                                                                                   type="text"
+                                                                                                   placeholder="点击输入参数"
                                                                                                    value="${param.value}"/>
                         </p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.type}</p></td>
@@ -279,7 +286,8 @@
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.field}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">
                             <%if(param.type=="file"){%><input name="${param.field}" type="file" value="${param.value}"/><%}else{%><input
-                                name="${param.field}" type="text"  placeholder="点击输入参数" value="${param.value}"/><%}%></p></td>
+                                name="${param.field}" type="text" placeholder="点击输入参数" value="${param.value}"/><%}%></p>
+                        </td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.type}</p></td>
                         <td class="tableblock halign-left valign-top"><p class="tableblock">${param.required}</p></td>
                         <%if(param.version !='-'){%>
@@ -370,7 +378,9 @@
                 <%if(!doc.kafka){%>
                 <div class="paragraph">
                     <p>
-                        <strong><button class="send-button" data-id="${doc.methodId}">Send Request</button></strong>
+                        <strong>
+                            <button class="send-button" data-id="${doc.methodId}">Send Request</button>
+                        </strong>
                         <img id="${doc.methodId}-loading"
                              src="http://t.focus-img.cn/img/e51b476d-4742-4ba6-8fc9-b99fc9c3c19b.png"
                              style="width: 2.5em; height: 2.5em; visibility: hidden">
@@ -463,7 +473,11 @@
         </span>
     </footer>
 </div>
-<script src="debug.js?v=${version}"></script>
-<script src="search.js?v=${version}"></script>
+<script>
+    MY_CUSTOM_DEBUG_JS
+</script>
+<script>
+    MY_CUSTOM_SEARCH_JS
+</script>
 </body>
 </html>

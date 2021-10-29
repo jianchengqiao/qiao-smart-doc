@@ -101,21 +101,31 @@ $("button").on("click", function () {
     }
     console.log("query-params=>" + JSON.stringify(queryParamData));
     console.log("url=>" + finalUrl)
+
+    if (headersData.Cookie != null && headersData.Cookie !== "") {
+        var arrCookie = headersData.Cookie.split(";");
+        for (var i = 0; i < arrCookie.length; i++) {
+            document.cookie = arrCookie[i]
+        }
+    }
+
     ajaxOptions.headers = headersData
     ajaxOptions.url = finalUrl
     ajaxOptions.type = method
-    ajaxOptions.data = body;
+    ajaxOptions.data = body
+    ajaxOptions.xhrFields = {withCredentials: true}
+    ajaxOptions.crossDomain = true
 
     const $responseEle = $("#" + id + "-response").find("pre code");
     const ajaxTime = new Date().getTime();
     $.ajax(ajaxOptions).done(function (result, textStatus, jqXHR) {
         const totalTime = new Date().getTime() - ajaxTime;
         $this.css("background", "#5cb85c");
-        $("#" + id + "-resp-status").html("&nbsp;Status:&nbsp;" + jqXHR.status + "&nbsp;&nbsp;" + jqXHR.statusText + "&nbsp;&nbsp;&nbsp;&nbsp;Time:&nbsp;" + totalTime + "&nbsp;ms&nbsp;&nbsp;&nbsp;&nbsp;"+ new Date().toLocaleString());
-        if (result.toString().startsWith("{")||result.toString().startsWith("[")) {
+        $("#" + id + "-resp-status").html("&nbsp;Status:&nbsp;" + jqXHR.status + "&nbsp;&nbsp;" + jqXHR.statusText + "&nbsp;&nbsp;&nbsp;&nbsp;Time:&nbsp;" + totalTime + "&nbsp;ms&nbsp;&nbsp;&nbsp;&nbsp;" + new Date().toLocaleString());
+        if (result.toString().startsWith("{") || result.toString().startsWith("[")) {
             const highlightedCode = hljs.highlight('json', JSON.stringify(result, null, 4)).value;
             $responseEle.html(highlightedCode);
-        }else {
+        } else {
             $responseEle.html(result.toString());
         }
     }).fail(function (jqXHR) {
