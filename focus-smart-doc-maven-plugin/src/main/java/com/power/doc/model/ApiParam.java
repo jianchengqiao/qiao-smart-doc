@@ -60,7 +60,7 @@ public class ApiParam {
     /**
      * version
      */
-    private String version;
+    private String version = "-";
 
     /**
      * field pid

@@ -150,7 +150,7 @@ public abstract class BaseDocsGeneratorMojo extends AbstractMojo {
         javaDocBuilder.setEncoding(Charset.DEFAULT_CHARSET);
         javaDocBuilder.setErrorHandler(e -> getLog().warn(e.getMessage()));
         //addSourceTree
-        javaDocBuilder.addSourceTree(new File("src/main/java"));
+        javaDocBuilder.addSourceTree(new File("/src/main/java"));
         //sources.stream().map(File::new).forEach(javaDocBuilder::addSourceTree);
         javaDocBuilder.addClassLoader(ClassLoaderUtil.getRuntimeClassLoader(project));
         loadSourcesDependencies(javaDocBuilder);

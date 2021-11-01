@@ -667,9 +667,6 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             }
             List<JavaAnnotation> annotations = parameter.getAnnotations();
             boolean isBody = annotations.stream().anyMatch(a -> SpringMvcAnnotations.REQUEST_BODY.equals(a.getType().getValue()));
-            if (!isBody && NO_COMMENTS_FOUND.equals(comment)) {
-                continue;
-            }
 
             String mockValue = createMockValue(paramsComments, paramName, fullTypeName, simpleTypeName, randomMock, isBody);
             JavaClass javaClass = builder.getJavaProjectBuilder().getClassByName(fullTypeName);
@@ -728,6 +725,9 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 queryParam = true;
             }
             if (JavaClassValidateUtil.isCollection(fullTypeName) || JavaClassValidateUtil.isArray(fullTypeName)) {
+                if (!isBody && NO_COMMENTS_FOUND.equals(comment)) {
+                    continue;
+                }
                 if (JavaClassValidateUtil.isCollection(typeName)) {
                     typeName = typeName + "<T>";
                 }
@@ -752,13 +752,17 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                     }
                 } else if (JavaClassValidateUtil.isPrimitive(gicName)) {
                     String shortSimple = DocClassUtil.processTypeNameForParams(gicName);
-                    ApiParam param = ApiParam.of().setField(paramName).setDesc(comment + ",[array of " + shortSimple + "]")
+                    ApiParam param = ApiParam.of().setField(paramName).setDesc(comment + "，逗号拼接")
                             .setRequired(required)
                             .setPathParam(isPathVariable)
                             .setQueryParam(queryParam)
                             .setId(paramList.size() + 1)
-                            .setType("array")
-                            .setValue(DocUtil.getValByTypeAndFieldName(gicName, paramName));
+                            .setType("string");
+                    if (EmptyUtil.notTrimEmpty(mockValue)){
+                        param.setValue(mockValue);
+                    }else {
+                        param.setValue(DocUtil.getValByTypeAndFieldName(gicName, paramName));
+                    }
                     paramList.add(param);
                     if (requestBodyCounter > 0) {
                         Map<String, Object> map = OpenApiSchemaUtil.arrayTypeSchema(gicName);
@@ -776,6 +780,9 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                     }
                 }
             } else if (JavaClassValidateUtil.isPrimitive(fullTypeName)) {
+                if (!isBody && NO_COMMENTS_FOUND.equals(comment)) {
+                    continue;
+                }
                 ApiParam param = ApiParam.of().setField(paramName)
                         .setType(DocClassUtil.processTypeNameForParams(simpleName))
                         .setId(paramList.size() + 1)
@@ -788,6 +795,9 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                     docJavaMethod.setRequestSchema(map);
                 }
             } else if (JavaClassValidateUtil.isMap(fullTypeName)) {
+                if (!isBody && NO_COMMENTS_FOUND.equals(comment)) {
+                    continue;
+                }
                 log.warning("When using smart-doc, it is not recommended to use Map to receive parameters, Check it in "
                         + javaMethod.getDeclaringClass().getCanonicalName() + "#" + javaMethod.getName());
                 //如果typeName 是 map 但没加泛型 java.util.HashMap
@@ -825,6 +835,9 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             }
             // param is enum
             else if (javaClass.isEnum()) {
+                if (!isBody && NO_COMMENTS_FOUND.equals(comment)) {
+                    continue;
+                }
                 String o = JavaClassUtil.getEnumParams(javaClass);
                 Object value = JavaClassUtil.getEnumValue(javaClass, isPathVariable || queryParam);
                 ApiParam param = ApiParam.of().setField(paramName)

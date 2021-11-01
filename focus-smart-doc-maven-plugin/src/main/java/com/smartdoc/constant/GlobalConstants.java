@@ -33,7 +33,7 @@ public interface GlobalConstants {
 
     String SOURCE_CODE_PATH = "/src/main/java";
 
-    String SOURCE_CODE_PATH_REVERSE = "\\src\\main\\java";
+    String SOURCE_CODE_PATH_REVERSE = "code\\src\\main\\java";
 
     String FILE_SEPARATOR = System.getProperty("file.separator");
 }
