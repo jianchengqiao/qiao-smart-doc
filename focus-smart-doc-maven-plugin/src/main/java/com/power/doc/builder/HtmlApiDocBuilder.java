@@ -119,17 +119,17 @@ public class HtmlApiDocBuilder {
         ProjectDocConfigBuilder configBuilder = new ProjectDocConfigBuilder(config, javaProjectBuilder);
         IDocBuildTemplate docBuildTemplate = new SpringBootDocBuildTemplate();
         List<ApiDoc> apiDocList = docBuildTemplate.getApiData(configBuilder);
-        String css = BeetlTemplateUtil.getByName(ALL_IN_ONE_CSS).render();
+//        String css = BeetlTemplateUtil.getByName(ALL_IN_ONE_CSS).render();
         INDEX_HTML = DEBUG_PAGE_ALL_LIVE_TPL;
         if (StringUtils.isNotEmpty(config.getAllInOneDocFileName())) {
             INDEX_HTML = config.getAllInOneDocFileName();
         }
         String index = builderTemplate.buildAllInOneFile(apiDocList, config, javaProjectBuilder, DEBUG_PAGE_ALL_LIVE_TPL);
-        String debugJs = BeetlTemplateUtil.getByName(DEBUG_JS_TPL).render();
+//        String debugJs = BeetlTemplateUtil.getByName(DEBUG_JS_TPL).render();
         String searchJs = builderTemplate.buildSearchJsFile(config, javaProjectBuilder, apiDocList, SEARCH_ALL_JS_TPL);
         files[0] = index;
-        files[1] = css;
-        files[2] = debugJs;
+//        files[1] = css;
+//        files[2] = debugJs;
         files[3] = searchJs;
         return files;
     }
